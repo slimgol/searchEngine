@@ -1,5 +1,6 @@
 import urllib2
-from BeautifulSoup import *
+#from BeautifulSoup import *
+from bs4 import BeautifulSoup
 from urlparse import urljoin
 
 #Create list of words to ignore.
