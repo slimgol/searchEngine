@@ -16,7 +16,7 @@ def crawl_(seed, depth=2):
             currentPage = urllib2.urlopen(currentUrl)#Open specified url.
         except URLError, error:
             print(error.reason)#Print the cause of the error.
-            continue'''Ignore the rest of instructions in this current iteration, and proceed to the next iteration.'''
+            continue 
 
         '''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
         soup = BeautifulSoup(currentPage.read())
