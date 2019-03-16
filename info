@@ -9,3 +9,12 @@ from urlparse import urljoin(baseUrl, subUrl)
 
 Note that both of these resultant urls refer to the same page, but the first contains redundant information. Therefore it is better to use the second approach.
 
+Using a queue:
+(FIFO ADT)
+queue = list()
+queue.append(<data>)	#Enqueue data.
+queue.pop(0)		#Return and remove first element in queue.
+
+
+
+
