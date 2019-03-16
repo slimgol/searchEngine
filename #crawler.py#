@@ -1,6 +1,0 @@
-from bs4 import BeautifulSoup
-import urllib2
-from urlparse import urljoin
-
-def crawl_(seed, depth=2):
-    urlQueue
