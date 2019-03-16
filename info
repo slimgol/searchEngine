@@ -9,6 +9,13 @@ from urlparse import urljoin(baseUrl, subUrl)
 
 Note that both of these resultant urls refer to the same page, but the first contains redundant information. Therefore it is better to use the second approach.
 
+Extracting a url from the 'a' tag:
+link.get('href')
+or
+dict(link.attrs)['href']
+
+The second approach parses the data in the 'a' tag into a dictionary and the accesses the content of the 'href' tag.
+
 Using a queue:
 (FIFO ADT)
 queue = list()
