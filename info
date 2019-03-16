@@ -1,0 +1,11 @@
+baseUrl = the current page
+subUrl = link found on the current page in the 'a' tag 'href' attribute
+
+We may want to visit the page referenced by the subUrl. To make the sub url a valid url we must do the following:
+Either:
+resultantUrl = baseUrl + subUrl (This is the concatenation of two strings)
+or
+from urlparse import urljoin(baseUrl, subUrl)
+
+Note that both of these resultant urls refer to the same page, but the first contains redundant information. Therefore it is better to use the second approach.
+
