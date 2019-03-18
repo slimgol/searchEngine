@@ -1,3 +1,4 @@
+'''Import all dependencies. Explain the purpose of each library in the context of this software.'''
 from bs4 import BeautifulSoup
 import urllib2
 from urlparse import urljoin
