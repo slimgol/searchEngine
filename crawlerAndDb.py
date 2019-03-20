@@ -82,13 +82,27 @@ def crawl_(seed, depth=4):
                     processing on this resource at some later date. Or perhaps it can 
                     be done concurrently (while crawling the web).'''
                     session.add(Urls(urlName=newUrl, classification=None))
-                     #print(newUrl)#Print the new url.
+                    #print(newUrl)#Print the new url.
+
+
+'''Create a method to iterate all of the results in the database and extract
+all of the text and create an array of dictionaries of the word counts in resource.
+Note that we will have to fetch the resource and extract the data. --> Focus on
+being able to parse the data from the webpage here.'''
 
 
 #Invoke crawler.
-
-
+crawl_('https://en.wikipedia.org/wiki/Self-driving_car')
 #Save changes made to the database.
+session.commit()
+#Testing out what we have just done: Query the database.
+res = session.query(Urls).all()
+for r in res:
+    print(r)
+
+
+
+
 '''
     for item in processedUrls:
         print(item)
