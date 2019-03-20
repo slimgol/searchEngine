@@ -97,9 +97,9 @@ def extractText():
     the url specifies, and then start extracting data from the url.'''
 
     infoArray = []#Empty info array.
-    for result in allResults:
+    for urlResult in allResults:
         try:
-            currentPage = urllib2.urlopen(currentUrl)#Open specified url.
+            currentPage = urllib2.urlopen(urlResult)#Open specified url.
         except URLError, error:
             print(error.reason)#Print the cause of the error.
             continue#Skip the remaining instructions in this current iteration.
@@ -123,7 +123,11 @@ def extractText():
                     if (token in wordDict):
                         wordDict[token] += 1#Increment token count by 1.
             #TODO: Process other components of the webpage.
-            
+
+            '''Add dictionary and id (url) to the infoArray. Remember that the
+            infoArray is an array of pairs, where the first element in the pair
+            is the url, and the second element is the word dictionary.'''
+            infoArray.append((urlResult, wordDict))
 
 #Invoke crawler.
 crawl_('https://en.wikipedia.org/wiki/Self-driving_car')
