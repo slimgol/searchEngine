@@ -89,6 +89,31 @@ def crawl_(seed, depth=4):
 all of the text and create an array of dictionaries of the word counts in resource.
 Note that we will have to fetch the resource and extract the data. --> Focus on
 being able to parse the data from the webpage here.'''
+def extractText():
+    '''Query all of the data from the database. Note that we may have to 
+    do this in chunks, due to memory constraints.'''
+    allResults = session.query(Urls).all()
+    '''Iterate over all of these urls and then open the each web resource that
+    the url specifies, and then start extracting data from the url.'''
+    for result in allResults:
+        try:
+            currentPage = urllib2.urlopen(currentUrl)#Open specified url.
+        except URLError, error:
+            print(error.reason)#Print the cause of the error.
+            continue#Skip the remaining instructions in this current iteration.
+
+            '''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
+            soup = BeautifulSoup(currentPage.read())#Get page content.
+
+            '''TODO: How should we handle heading data versus paragraph data.
+            Note that headings should be weighted heavily, as it gives the 
+            main idea of what is going on.'''
+            allParagraps = soup.find_all('p')
+            '''Iterate over all of these paragraps and create a dictionary 
+            of the word counts.'''
+            for paragraph in allParagraps:
+                #Get text and then split it up into individual tokens.
+                tokens = paragraph.get_text().split()
 
 
 #Invoke crawler.
