@@ -95,12 +95,17 @@ def extractText():
     allResults = session.query(Urls).all()
     '''Iterate over all of these urls and then open the each web resource that
     the url specifies, and then start extracting data from the url.'''
+
+    infoArray = []#Empty info array.
     for result in allResults:
         try:
             currentPage = urllib2.urlopen(currentUrl)#Open specified url.
         except URLError, error:
             print(error.reason)#Print the cause of the error.
             continue#Skip the remaining instructions in this current iteration.
+
+        '''Every url will have a dictionary.'''
+        wordDict = dict()#Empty dictionary.
 
             '''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
             soup = BeautifulSoup(currentPage.read())#Get page content.
@@ -114,7 +119,11 @@ def extractText():
             for paragraph in allParagraps:
                 #Get text and then split it up into individual tokens.
                 tokens = paragraph.get_text().split()
-
+                for token in tokens:
+                    if (token in wordDict):
+                        wordDict[token] += 1#Increment token count by 1.
+            #TODO: Process other components of the webpage.
+            
 
 #Invoke crawler.
 crawl_('https://en.wikipedia.org/wiki/Self-driving_car')
