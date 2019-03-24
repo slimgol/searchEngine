@@ -45,19 +45,30 @@ def convert_to_wn(tagged_text):
 		new_list.append(t)
 	return new_list
 
-#print(tagged)
+
 tagged = convert_to_wn(tagged)
-print(tagged)
 
 lemmatizer = WordNetLemmatizer()
-print(tagged) 
-for t in tagged:
-	if (t[1] == wn.ADJ or t[1] == wn.VERB or t[1] == wn.NOUN or t[1] == wn.ADV):
-		print(lemmatizer.lemmatize(t[0], pos=t[1]))
+
+'''Approach: Given a list of tuples of the form --> (token, POS Tag), the aim is to 
+lemmatize (convert to its base form) the token, and then store the tokens in a new list.
+Perhaps we will store the results in a single string... This is something to think about. 
+In its current form, this method will return a list of words.'''
+def lemmatize_tagged_text(tagged_text):#tagged_text is a list of tuples of the form (token, POS tag).
+	'''Lemmatize tagged text and return a list.'''
+	new_list = []#Create a new empty list. 
+	for t in tagged_text:
+		if (t[1] == wn.ADJ or t[1] == wn.VERB or t[1] == wn.NOUN or t[1] == wn.ADV):
+			new_list.append(lemmatizer.lemmatize(t[0], pos=t[1]))
 	else:
-		print(t[0])#Do not lemmatize, as there is no POS tag to help with the process.
+		new_list.append(t[0])#Do not lemmatize, as there is no POS tag to help with the process.
 
+	return new_list
 
+lemmatized_text = lemmatize_tagged_text(tagged)
+
+for word in lemmatized_text:
+	print(word)
 
 
 
