@@ -123,13 +123,16 @@ def normalize_text(text):
 
 '''Accepts a list of strings as input, and then normalizes each string, and returns 
 a list of strings, where each string is normalized.'''
-def normalize_list_of_strings(text_list)
+def normalize_list_of_strings(text_list):
 	new_list = []
 	for l in text_list:
 		new_list.append(normalize_text(l))
 	return new_list
 
-print(normalize_text("Hey there how are you doing. aren't you have'nt you've play the game a the"))
+print(normalize_text("Hey there how are you doing. aren't you haven't you've play the game a the"))
+text_corpus = ["Accepts a list of strings as input, and then normalizes each string",
+"Given an input string perform the following operations: expand contractions, lemmatize text,remove special characters,"]
 
-
+text_corpus = normalize_list_of_strings(text_corpus)
+print(text_corpus[0])
 
