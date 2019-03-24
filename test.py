@@ -10,15 +10,21 @@ need some input text to train it. We will use the George Washington State Union 
 from 2002.'''
 train_text = state_union.raw("2002-GWBush.txt")#Training text.
 
-custom_sent_tokenizer = PunktSentenceTokenizer(train_text)
+custom_sent_tokenizer = PunktSentenceTokenizer(train_text)#Instante PunkSentenceTokenizer.
 
 tokenized = custom_sent_tokenizer.tokenize("cars and buses, plays and played")
 
+#Function to tokenize a string of text.
+def tokenize(text):
+	return custom_sent_tokenizer.tokenize(text)
+
+
 print(tokenized)
 words = nltk.word_tokenize(tokenized[0])
-print(words)
+#print(words)
 tagged = nltk.pos_tag(words)
 #print(tagged[0][1].startswith('N'))
+
 
 '''Convert POS form into a form that can be handled by the WordNetLemmatizer lemmatizer.'''
 def convert_to_wn(tagged_text):
@@ -65,10 +71,16 @@ def lemmatize_tagged_text(tagged_text):#tagged_text is a list of tuples of the f
 
 	return new_list
 
-lemmatized_text = lemmatize_tagged_text(tagged)
+lemmatized_text = lemmatize_tagged_text(tagged)#Lemmatize the tagged text.
+lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strings. 
 
-for word in lemmatized_text:
-	print(word)
+'''This method accepts a string, and returns a string.'''
+def remove_stopwords(text):
+	text = tokenize(text)#Tokenize the input string.
+	text = [elmt for elmt in text.split() if elmt not in stopwords]
+	return ' '.join(text)#Join the tokens in the array to form a string.
+	
+
 
 
 
