@@ -44,7 +44,7 @@ def tokenize(text):
 #words = nltk.word_tokenize(tokenized[0])
 #tagged = nltk.pos_tag(words)
 
-
+print(tokenize("Hello, how are you? Play the game, and win"))
 
 '''Convert POS form into a form that can be handled by the WordNetLemmatizer lemmatizer.'''
 def convert_to_wn(tagged_text):
@@ -115,6 +115,7 @@ def remove_stopwords(text):
 def normalize_text(text):
 	text = expandContractions(text)#String of words.
 	tagged = nltk.pos_tag(text.split())#List of tuples.
+	#TODO: Tokenize words.
 	tagged_wn = convert_to_wn(tagged)#List of tuples; wordnet form.
 	lemmatized_text = lemmatize_tagged_text(tagged_wn)#Is list of words.
 	lemmatized_str = ' '.join(lemmatized_text)#Is string of words.
@@ -129,10 +130,25 @@ def normalize_list_of_strings(text_list):
 		new_list.append(normalize_text(l))
 	return new_list
 
-print(normalize_text("Hey there how are you doing. aren't you haven't you've play the game a the"))
+#print(normalize_text("Hey there how are you doing. aren't you haven't you've play the game a the"))
 text_corpus = ["Accepts a list of strings as input, and then normalizes each string",
 "Given an input string perform the following operations: expand contractions, lemmatize text,remove special characters,"]
 
-text_corpus = normalize_list_of_strings(text_corpus)
-print(text_corpus[0])
+#text_corpus = normalize_list_of_strings(text_corpus)
+#print(text_corpus[0])
+
+'''TODO: THE CODE BELOW IS NECESSARY. IT NEEDS TO BE INTEGRATED WITH THE ABOVE.'''
+
+def normalize_corpus_of_strings_wordlemmatizing(text_list):
+	new_list = []
+	for l in text_list:
+		#new_list.append(' '.join(nltk.word_tokenize(l)))#Must join back to a string.
+		new_list.append(nltk.word_tokenize(l))
+	return new_list
+
+
+print(normalize_corpus_of_strings_wordlemmatizing(text_corpus)[0])
+
+
+
 
