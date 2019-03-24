@@ -3,6 +3,7 @@ import re#Dependency for dealing with regular expressions.
 import nltk#Library for natural language processing.
 import string
 from nltk.stem import WordNetLemmatizer#To help with lemmatizing words.
+from nlp1 import cList
 
 stopwords_list = nltk.corpus.stopwords.words('english')#Create a list of all stop words.
 wnl = WordNetLemmatizer()#Instantiate WordNetLemmatizer class.
@@ -21,5 +22,9 @@ def expand_contractions(text, contraction_mapping):
 			expanded_contraction = contraction_mapping.get(match.lower())
 		expanded_contraction = match[0] + expanded_contraction[1:]
 		return expanded_contraction
+
+	expanded_text = contractions_pattern.sub(expand_match, text)
+	expanded_text = re.sub("'","",expanded_text)
+	return expanded_text
 
 
