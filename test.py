@@ -3,6 +3,26 @@ from nltk.corpus import state_union
 from nltk.corpus import wordnet as wn
 from nltk.tokenize import PunktSentenceTokenizer
 from nltk.stem import WordNetLemmatizer
+import re
+from CONTRACTIONS_LIST import cList#Import dictionary containing contractions, and their mapping.
+import string
+
+
+c_re = re.compile('(%s)' % '|'.join(cList.keys()))
+
+stopwords_list = nltk.corpus.stopwords.words('english')#Create a list of all stop words.
+wnl = WordNetLemmatizer()#Instantiate WordNetLemmatizer class.
+
+''''Define a function to take care of tokenizing a given set of text. This function will 
+remove any whitespaces from each of the tokens.'''
+
+def expandContractions(text, c_re=c_re):
+	def replace(match):
+		return cList[match.group(0)]
+	return c_re.sub(replace, text)
+
+
+'''Define a function to bring words into their base form.'''
 
 stopwords = nltk.corpus.stopwords.words('english')
 
@@ -78,11 +98,11 @@ def lemmatize_tagged_text(tagged_text):#tagged_text is a list of tuples of the f
 
 '''This method accepts a string, and returns a string.'''
 def remove_stopwords(text):
-	tokenized_text = tokenize(text)#Tokenize the input string.
-	tokenized_text = tokenized_text[0].split()#Get inner text, and split string by whitespaces.
+	text_list = text.split()#Split string into array of tokens.
 	new_text = []
 	#Create a new list without the stopwords.
-	for t in tokenized_text:
+
+	for t in text_list:
 		if t not in stopwords:
 			new_text.append(t)
 	'''Return a string- the string will be all of the elements of the list concatenated 
@@ -100,8 +120,24 @@ def remove_stopwords(text):
 	remove special characters,
 	remove stopwords,
 	return the resultant string.'''
+
+t = "Hey there how are you doing. aren't you haven't you've play the game a the"
+#tokenized_str = ' '.join(tokenize(t))
+#print(tokenized_str)
+print(t)
+t_ = expandContractions(t)#String.
+#tokens_list = nltk.word_tokenize(t)
+#print(tokens_list)
+#print(tokens_list)
+print(t_.split())
+tagged = nltk.pos_tag(t_.split())#List of tuples.
+tagged_wn = convert_to_wn(tagged)#List of tuples; wordnet form.
+lemmatized_text = lemmatize_tagged_text(tagged_wn)#Is list of words.
+lemmatized_str = ' '.join(lemmatized_text)#Is string of words.
+lemmatized_str = remove_stopwords(lemmatized_str)#Is a string of words (does not contain stopwords).
+print(lemmatized_str)
+'''
 def normalize_text(text):
-	tokenized_str = tokenize(text)[0]#Will contain the tokenized string (in string, and not list form).
 	tokens_list = nltk.word_tokenize(tokenized_str)
 	tagged = nltk.pos_tag(tokens_list)
 	tagged = convert_to_wn(tagged)
@@ -111,8 +147,8 @@ def normalize_text(text):
 	#Remove special characters. 
 	return lemmatized_string
 
-print(normalize_text("Hey there how are you doing aren't you have'nt you've play the game a the"))
-
-
+normalize_text("Hey there how are you doing. aren't you have'nt you've play the game a the")
+print(normalize_text("Hey there how are you doing. aren't you have'nt you've play the game a the"))
+'''
 
 
