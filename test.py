@@ -81,14 +81,14 @@ lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strin
 '''This method accepts a string, and returns a string.'''
 def remove_stopwords(text):
 	tokenized_text = tokenize(text)#Tokenize the input string.
-	#new_text = [elmt for elmt in tokenized_text if elmt not in stopwords]
-	#return ' '.join(new_text)#Join the tokens in the array to form a string.
-	tokenized_text = tokenized_text[0].split()
+	tokenized_text = tokenized_text[0].split()#Get inner text, and split string by whitespaces.
 	new_text = []
+	#Create a new list without the stopwords.
 	for t in tokenized_text:
 		if t not in stopwords:
 			new_text.append(t)
-
+	'''Return a string- the string will be all of the elements of the list concatenated 
+		together, with a single whitespace between each element.'''
 	return ' '.join(new_text)
 
 
