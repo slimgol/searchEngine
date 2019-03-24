@@ -121,6 +121,14 @@ def normalize_text(text):
 	lemmatized_str = remove_stopwords(lemmatized_str)#Is a string of words (does not contain stopwords).
 	return lemmatized_str
 
+'''Accepts a list of strings as input, and then normalizes each string, and returns 
+a list of strings, where each string is normalized.'''
+def normalize_list_of_strings(text_list)
+	new_list = []
+	for l in text_list:
+		new_list.append(normalize_text(l))
+	return new_list
+
 print(normalize_text("Hey there how are you doing. aren't you have'nt you've play the game a the"))
 
 
