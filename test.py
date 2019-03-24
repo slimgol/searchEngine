@@ -13,19 +13,17 @@ train_text = state_union.raw("2002-GWBush.txt")#Training text.
 
 custom_sent_tokenizer = PunktSentenceTokenizer(train_text)#Instante PunkSentenceTokenizer.
 
-tokenized = custom_sent_tokenizer.tokenize("""Define a function to take care of tokenizing a given set of text. This function will 
-remove any whitespaces from each of the tokens""")
+#tokenized = custom_sent_tokenizer.tokenize("""Define a function to take care of tokenizing a given set of text. This function will 
+#remove any whitespaces from each of the tokens""")
 
 '''Function to tokenize a string of text. Accepts a string as an argument.'''
 def tokenize(text):
 	return custom_sent_tokenizer.tokenize(text)
 
 
-#print(tokenized)
-words = nltk.word_tokenize(tokenized[0])
-#print(words)
-tagged = nltk.pos_tag(words)
-#print(tagged[0][1].startswith('N'))
+#words = nltk.word_tokenize(tokenized[0])
+#tagged = nltk.pos_tag(words)
+
 
 
 '''Convert POS form into a form that can be handled by the WordNetLemmatizer lemmatizer.'''
@@ -54,7 +52,7 @@ def convert_to_wn(tagged_text):
 	return new_list
 
 
-tagged = convert_to_wn(tagged)
+#tagged = convert_to_wn(tagged)
 
 lemmatizer = WordNetLemmatizer()
 
@@ -74,8 +72,8 @@ def lemmatize_tagged_text(tagged_text):#tagged_text is a list of tuples of the f
 	return new_list
 
 
-lemmatized_text = lemmatize_tagged_text(tagged)#Lemmatize the tagged text.
-lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strings. 
+#lemmatized_text = lemmatize_tagged_text(tagged)#Lemmatize the tagged text.
+#lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strings. 
 
 
 '''This method accepts a string, and returns a string.'''
@@ -92,11 +90,28 @@ def remove_stopwords(text):
 	return ' '.join(new_text)
 
 
-print(lemmatized_string)
-print(remove_stopwords(lemmatized_string))
+#print(lemmatized_string)
+#print(remove_stopwords(lemmatized_string))
 
 
+'''Given an input string perform the following operations:
+	expand contractions, 
+	lemmatize text,
+	remove special characters,
+	remove stopwords,
+	return the resultant string.'''
+def normalize_text(text):
+	tokenized_str = tokenize(text)[0]#Will contain the tokenized string (in string, and not list form).
+	tokens_list = nltk.word_tokenize(tokenized_str)
+	tagged = nltk.pos_tag(tokens_list)
+	tagged = convert_to_wn(tagged)
+	lemmatized_text = lemmatize_tagged_text(tagged)#Lemmatize the tagged text.
+	lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strings. 
 
+	#Remove special characters. 
+	return lemmatized_string
+
+print(normalize_text("Hey there how are you doing aren't you have'nt you've play the game a the"))
 
 
 
