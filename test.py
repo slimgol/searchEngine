@@ -4,6 +4,7 @@ from nltk.corpus import wordnet as wn
 from nltk.tokenize import PunktSentenceTokenizer
 from nltk.stem import WordNetLemmatizer
 
+stopwords = nltk.corpus.stopwords.words('english')
 
 '''Note that the PunktSentenceTokenizer uses unsupervised learning, and thus we only
 need some input text to train it. We will use the George Washington State Union Speech 
@@ -12,14 +13,15 @@ train_text = state_union.raw("2002-GWBush.txt")#Training text.
 
 custom_sent_tokenizer = PunktSentenceTokenizer(train_text)#Instante PunkSentenceTokenizer.
 
-tokenized = custom_sent_tokenizer.tokenize("cars and buses, plays and played")
+tokenized = custom_sent_tokenizer.tokenize("""Define a function to take care of tokenizing a given set of text. This function will 
+remove any whitespaces from each of the tokens""")
 
-#Function to tokenize a string of text.
+'''Function to tokenize a string of text. Accepts a string as an argument.'''
 def tokenize(text):
 	return custom_sent_tokenizer.tokenize(text)
 
 
-print(tokenized)
+#print(tokenized)
 words = nltk.word_tokenize(tokenized[0])
 #print(words)
 tagged = nltk.pos_tag(words)
@@ -66,21 +68,32 @@ def lemmatize_tagged_text(tagged_text):#tagged_text is a list of tuples of the f
 	for t in tagged_text:
 		if (t[1] == wn.ADJ or t[1] == wn.VERB or t[1] == wn.NOUN or t[1] == wn.ADV):
 			new_list.append(lemmatizer.lemmatize(t[0], pos=t[1]))
-	else:
-		new_list.append(t[0])#Do not lemmatize, as there is no POS tag to help with the process.
+		else:
+			new_list.append(t[0])#Do not lemmatize, as there is no POS tag to help with the process.
 
 	return new_list
+
 
 lemmatized_text = lemmatize_tagged_text(tagged)#Lemmatize the tagged text.
 lemmatized_string = ' '.join(lemmatized_text)#Create string from a list of strings. 
 
+
 '''This method accepts a string, and returns a string.'''
 def remove_stopwords(text):
-	text = tokenize(text)#Tokenize the input string.
-	text = [elmt for elmt in text.split() if elmt not in stopwords]
-	return ' '.join(text)#Join the tokens in the array to form a string.
-	
+	tokenized_text = tokenize(text)#Tokenize the input string.
+	#new_text = [elmt for elmt in tokenized_text if elmt not in stopwords]
+	#return ' '.join(new_text)#Join the tokens in the array to form a string.
+	tokenized_text = tokenized_text[0].split()
+	new_text = []
+	for t in tokenized_text:
+		if t not in stopwords:
+			new_text.append(t)
 
+	return ' '.join(new_text)
+
+
+print(lemmatized_string)
+print(remove_stopwords(lemmatized_string))
 
 
 
