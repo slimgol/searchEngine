@@ -146,6 +146,12 @@ text_corpus = ["Accept?s a? l45i^st of strings as input, and then normalizes eac
 
 text_corpus = normalize_list_of_strings(text_corpus)
 print(text_corpus[0])
+print(text_corpus[1])
+
+
+
+
+
 
 '''TODO: THE CODE BELOW IS NECESSARY. IT NEEDS TO BE INTEGRATED WITH THE ABOVE.'''
 
