@@ -144,6 +144,7 @@ def normalize_corpus_of_strings_wordlemmatizing(text_list):
 	for l in text_list:
 		#new_list.append(' '.join(nltk.word_tokenize(l)))#Must join back to a string.
 		new_list.append(nltk.word_tokenize(l))
+	#Remove special characters.
 	return new_list
 
 
