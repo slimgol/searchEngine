@@ -11,6 +11,8 @@ def remove_special_chars(text):
 	for token in text.split():
 		new_array.append(re.sub(regExp,'',token))
 	return ' '.join(new_array)
-	
+
+print(remove_special_chars("Hello? ? How are you today lady in red? Okayyy!!!"))
+
 
 	

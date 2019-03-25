@@ -105,6 +105,15 @@ def remove_stopwords(text):
 		together, with a single whitespace between each element.'''
 	return ' '.join(new_text)#Convert array of words to string of words, and return to the calling function.
 
+regExp = r"[^a-zA-Z0-9]+"#Regular expression.
+
+'''Accepts a string of text, removes all of the special characters and returns a new string.'''
+def remove_special_chars(text):
+	new_array = []
+	for token in text.split():
+		new_array.append(re.sub(regExp,'',token))
+	return ' '.join(new_array)
+
 
 '''Given an input string perform the following operations:
 	expand contractions, 
@@ -119,6 +128,7 @@ def normalize_text(text):
 	tagged_wn = convert_to_wn(tagged)#List of tuples; wordnet form.
 	lemmatized_text = lemmatize_tagged_text(tagged_wn)#Is list of words.
 	lemmatized_str = ' '.join(lemmatized_text)#Is string of words.
+	lemmatized_str = remove_special_chars(lemmatized_str)#Is string of words.
 	lemmatized_str = remove_stopwords(lemmatized_str)#Is a string of words (does not contain stopwords).
 	return lemmatized_str
 
@@ -131,11 +141,11 @@ def normalize_list_of_strings(text_list):
 	return new_list
 
 #print(normalize_text("Hey there how are you doing. aren't you haven't you've play the game a the"))
-text_corpus = ["Accepts a list of strings as input, and then normalizes each string",
+text_corpus = ["Accept?s a? l45i^st of strings as input, and then normalizes each string",
 "Given an input string perform the following operations: expand contractions, lemmatize text,remove special characters,"]
 
-#text_corpus = normalize_list_of_strings(text_corpus)
-#print(text_corpus[0])
+text_corpus = normalize_list_of_strings(text_corpus)
+print(text_corpus[0])
 
 '''TODO: THE CODE BELOW IS NECESSARY. IT NEEDS TO BE INTEGRATED WITH THE ABOVE.'''
 
@@ -148,7 +158,7 @@ def normalize_corpus_of_strings_wordlemmatizing(text_list):
 	return new_list
 
 
-print(normalize_corpus_of_strings_wordlemmatizing(text_corpus)[0])
+#print(normalize_corpus_of_strings_wordlemmatizing(text_corpus)[0])
 
 
 
