@@ -10,6 +10,7 @@ Approach:
 '''Import all dependencies.'''
 from bs4 import BeautifulSoup
 from urllib import request
+from test import normalize_text#Import function to normalize a string of text.
 
 
 '''Function accepts a url, extracts text from the url, and then returns the extracted
@@ -33,13 +34,17 @@ def extractText(urlString):
 	return paragraphString
 
 '''This accepts a list of pairs--> (url, topic),
-and returns a list of pairs--> (text as single string from url, topic) '''
+and returns a list of pairs--> (text as single string from url, topic) 
+Note that this function also normalizes the string.'''
 def createTaggedDataSet(urlTaggedList):
-	trainingList = []#(text as single string from url, topic)
+	taggedDataList = []#(text as single string from url, topic)
 	for pair in urlTaggedList:
-		text = extractText(pair[0])
+		text = extractText(pair[0])#Extract text from url.
 		if (text != None):
-			trainingList.append(text, pair[1])
+			taggedDataList.append((normalize_text(text), pair[1]))#Add pair (text, topic) to list.
+
+	return taggedDataList
+
 
 
 

@@ -144,9 +144,9 @@ def normalize_list_of_strings(text_list):
 text_corpus = ["Accept?s a? l45i^st of strings as input, and then normalizes each string",
 "Given an input string perform the following operations: expand contractions, lemmatize text,remove special characters,"]
 
-text_corpus = normalize_list_of_strings(text_corpus)
-print(text_corpus[0])
-print(text_corpus[1])
+#text_corpus = normalize_list_of_strings(text_corpus)
+#print(text_corpus[0])
+#print(text_corpus[1])
 
 
 
