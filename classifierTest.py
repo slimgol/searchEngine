@@ -58,7 +58,7 @@ Adding new code below...
 
 from featureExtraction import bow_extractor
 import nltk
-import gensim
+#import gensim
 
 #Bag-of-words features.
 #Train bow vectorizer on the normalized train corpus.
@@ -97,10 +97,26 @@ def train_predict_evaluate_model(classifier, train_features, train_labels, test_
 	#Build model.
 	classifier.fit(train_features,train_labels)
 	#Predict using model.
-	predictions = classifier.(test_features)
+	predictions = classifier.predict(test_features)
 	#Evaluate model prediction performance.
 	get_metrics(true_labels=test_labels,predicted_labels=predictions)
 	return predictions
+
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import SGDClassifier
+
+mnb = MultinomialNB()
+svm = SGDClassifier(loss='hinge',n_iter=100)
+
+
+'''
+Now we will train, predict, and evaluate models for all the different types of features using
+Multinomial Naive Bayes and Support Vector Machines.
+'''
+
+#Multinomial Naive Bayes with BOW features.
+mnb_bow_predictions = train_predict_evaluate_model(classifier=mnb, train_features=bow_train_features,train_labels=train_labels,test_features=bow_test_features,test_labels=test_labels)
+
 
 
 
