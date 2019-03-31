@@ -1,16 +1,22 @@
+'''This program is built for Python3.'''
+
+
+
 '''Import all dependencies. Explain the purpose of each library in the context of this software.'''
 from bs4 import BeautifulSoup
-import urllib2
-from urlparse import urljoin
+from urllib import request
+from urllib.parse import urljoin
 
 def crawl_(seed, depth=4):
     '''TO DO:We need to find a way of being able to search through the urls much faster; consider a lookup table, as these have constant search time.'''
 
-    processedUrls = set()#Set to stored the processed urls.
+
+    processedUrls = []#Empty list to store processed urls.#set()#Set to stored the processed urls.
     
     urlQueue = list()#Set up queue.
     urlQueue.append(seed)#Enqueue seed url.
-    processedUrls.add(seed)
+    #processedUrls.add(seed)
+    processedUrls.append(seed)
     #Perform a breadth first search to the specified depth.
     for i in range(depth):
         if (len(urlQueue) == 0):#No urls in queue.
@@ -20,10 +26,12 @@ def crawl_(seed, depth=4):
         #processedUrls.add(currentUrl)#Add current url to the set.
         
         try:
-            currentPage = urllib2.urlopen(currentUrl)#Open specified url.
-        except: #URLError error:
-            print(error.reason)#Print the cause of the error.
-            continue 
+            #currentPage = http.request('GET', currentUrl)
+            #currentPage = urllib3.connection_from_url(currentUrl)
+            currentPage = request.urlopen(currentUrl)
+        except:
+            print("Could not open page")#Print the cause of the error.
+            continue
 
         '''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
         soup = BeautifulSoup(currentPage.read())
@@ -42,8 +50,10 @@ def crawl_(seed, depth=4):
                 #TODO: Do some more processing here.
                 if (newUrl not in processedUrls):
                     urlQueue.append(newUrl)#Append the new url to the queue.
-                    processedUrls.add(newUrl)
+                    #processedUrls.add(newUrl)
+                    processedUrls.append(newUrl)
                 #print(newUrl)#Print the new url.
+
 
     for item in processedUrls:
         print(item)
@@ -52,7 +62,7 @@ def crawl_(seed, depth=4):
     print(len(urlQueue))
     
 
-            
-            
 
-        
+
+
+
