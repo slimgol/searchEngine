@@ -1,5 +1,5 @@
 '''
-This program is built for Python3.
+This program is built for python3.
 Things to do:
     Only store and process the home pages of each web resource.
 '''

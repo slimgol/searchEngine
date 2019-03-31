@@ -45,8 +45,69 @@ train_corpus,test_corpus,train_labels,test_labels = prepare_datasets(corpus,labe
 print(train_corpus[1])
 
 normalized_train_corpus = normalize_list_of_strings(train_corpus)#Normalize corpus of training data.
+normalized_test_corpus = normalize_list_of_strings(test_corpus)#Normalize corpus of test data.
 print("--------------------\n\n\n\n")
 print(normalized_train_corpus[1])
+
+
+
+'''
+Everything works perfectly up to here...
+Adding new code below...
+'''
+
+from featureExtraction import bow_extractor
+import nltk
+import gensim
+
+#Bag-of-words features.
+#Train bow vectorizer on the normalized train corpus.
+bow_vectorizer, bow_train_features = bow_extractor(normalized_train_corpus)
+#Use the trained vectorizer to transform the normalized test corpus, to create the bag of words for the normalized test corpus.
+bow_test_features = bow_vectorizer.transform(normalized_test_corpus)
+
+
+#Tokenize documents.
+tokenized_train = [nltk.word_tokenize(text) for text in normalized_train_corpus]
+
+
+'''
+Once we have extracted all of the features above, we will now define a function that will
+be useful for evaluation of our classification model, based on a predefined set of metrics.
+'''
+
+from sklearn import metrics
+import numpy as np
+
+def get_metrics(true_labels, predicted_labels):
+	print('Accuracy: '+str(np.round(metrics.accuracy_score(true_labels,predicted_labels),2)))
+	print('Precision: '+str(np.round(metrics.precision_score(true_labels,predicted_labels,average='weighted'),2)))
+	print('Recall: '+str(np.round(metrics.recall_score(true_labels,predicted_labels,average='weighted'),2)))
+	print('F1 Score: '+str(np.round(metrics.f1_score(true_labels,predicted_labels,average='weighted'),2)))
+
+
+
+'''
+We will now define a function that trains the model using an ML algorithm and the training data, 
+performs predictions on the test data using the trained model, and then evaluates the predictions 
+using the preceeding function to give us the model performance.
+'''
+
+def train_predict_evaluate_model(classifier, train_features, train_labels, test_features, test_labels):
+	#Build model.
+	classifier.fit(train_features,train_labels)
+	#Predict using model.
+	predictions = classifier.(test_features)
+	#Evaluate model prediction performance.
+	get_metrics(true_labels=test_labels,predicted_labels=predictions)
+	return predictions
+
+
+
+
+
+
+
 
 
 
