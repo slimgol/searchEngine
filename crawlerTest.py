@@ -1,4 +1,8 @@
-'''This program is built for Python3.'''
+'''
+This program is built for Python3.
+Things to do:
+    Only store and process the home pages of each web resource.
+'''
 
 
 
@@ -54,14 +58,7 @@ def crawl_(seed, depth=4):
                     processedUrls.append(newUrl)
                 #print(newUrl)#Print the new url.
 
-
-    for item in processedUrls:
-        print(item)
-    '''This si just some information that will help us during the development phase. The queue should have 'depth' less elements than the set of processed urls. Explain why this is.'''
-    print(len(processedUrls))
-    print(len(urlQueue))
-    
-
+    return processedUrls#Return the list of processed urls.
 
 
 
