@@ -35,7 +35,8 @@ def extractText(urlString):
 
 '''This accepts a list of pairs--> (url, topic),
 and returns a list of pairs--> (text as single string from url, topic) 
-Note that this function also normalizes the string.'''
+Note that this function also normalizes the string.
+Returns a list of pairs-->(normalized string, topic).'''
 def createTaggedDataSet(urlTaggedList):
 	taggedDataList = []#(text as single string from url, topic)
 	for pair in urlTaggedList:
@@ -44,6 +45,8 @@ def createTaggedDataSet(urlTaggedList):
 			taggedDataList.append((normalize_text(text), pair[1]))#Add pair (text, topic) to list.
 
 	return taggedDataList
+
+	
 
 
 
