@@ -32,6 +32,17 @@ def extractText(urlString):
 
 	return paragraphString
 
+'''This accepts a list of pairs--> (url, topic),
+and returns a list of pairs--> (text as single string from url, topic) '''
+def createTaggedDataSet(urlTaggedList):
+	trainingList = []#(text as single string from url, topic)
+	for pair in urlTaggedList:
+		text = extractText(pair[0])
+		if (text != None):
+			trainingList.append(text, pair[1])
+
+
+
 
 
 
