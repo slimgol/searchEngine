@@ -14,8 +14,7 @@ import trainTestData #Import function to extract text from a given url, and norm
 
 normalized_labeled_set = trainTestData.createTaggedDataSet(seedPages.ENERGY_SEED_URLS)
 
-print(normalized_labeled_set[3])
-print(normalized_labeled_set[2])
+
 
 
 '''
@@ -23,10 +22,7 @@ TODO: Prepare training and testing data sets. Thus, split the normalized labaled
 a normalized training set and a normalized testing set.
 '''
 
-#TODO: Create function here.
-
-#TODO: Form the following:
-#TODO: From a single normalized labeled corpus, namely: normalized_labeled_set, create the following subsets.
+#TODO: Split normalized_labeled_set into training and test sets.
 #normalized_labeled_train, normalized_labeled_test --> derived from normalized_labeled_set
 
 #Create the train corpus, and their associated labels.
@@ -45,6 +41,9 @@ for pair in normalized_labeled_test:
 
 
 
+############################
+####FEATURE EXTRACTION######     
+############################
 
 from featureExtraction import bow_extractor
 import nltk
