@@ -58,7 +58,6 @@ Adding new code below...
 
 from featureExtraction import bow_extractor
 import nltk
-#import gensim
 
 #Bag-of-words features.
 #Train bow vectorizer on the normalized train corpus.
