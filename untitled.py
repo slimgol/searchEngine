@@ -88,7 +88,7 @@ def trainModel(classifier):
 mnb = MultinomialNB()
 
 #TODO: Explain what this function does.
-def makePrediction(url):
+def classifyUrl(url):
 	text = extractText(url)
 	if (text == None):
 		return None
@@ -99,7 +99,7 @@ def makePrediction(url):
 	#Make prediction.
 	prediction = classifier.predict(bow_features)
 	return prediction #TODO: Explain what data type is returned, and also whatelese needs to be done.
-	
+
 
 
 

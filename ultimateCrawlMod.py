@@ -1,51 +1,99 @@
-#Crawl the web continuously.
-
-#Before any crawling begins, query the database for all the urls that pages that have been indexed.
-#Store in a global queue.
-
-#Import classifier. 
-#Check to see if classifier has been trained; if not then train, otherwise, classifier is ready to be used.
-
-#Note that the classifier will not be used immediately. 
-
-
-#Each crawler will crawl a list of seed pages in its specific domain.
-#Check the global queue to makesure that a particular url has not been indexed before storing that 
-#url in the queue.
-
-#The sixth thread will take care of repeatedly iterating over the queue and then classifying 
-#each url and then storing that url to the database.
-#If the queue is empty then set a timeout for this thread for a few seconds. 
-
-
-from modifiedCrawler import crawl_
+from bs4 import BeautifulSoup
+from urllib import request
+from urllib.parse import urljoin
 import time #Will be used to force thread to sleep.
 import threading #Will be used to achieve parallelism.
+from untitled import classifyUrl #Function to classify urls.
+
+'''
+Approach:
+We will need to use a global a few global variables so that two threads can access the resources.
+'''
+
 
 #Query database and store all urls in a set (globalProcessedUrlSet).
+#Empty set.
+globalProcessedUrlSet = set()
+#TODO: Query the database for all of the urls. Add each url to the set.
 
 #Declare a gloabl url queue that is initially empty.
-#This queue will be used for processing all of the urls.
+globalUrlQueue = list()#Create empty list.
 
-def processUrlQueue(urlQueue):
+
+'''
+globalUrlQueue- This is so that our "url processor" function can access the global queue 
+and process it. Thus, the url processor will classify the web resource and then store it in the database.
+initialProcessedUrls- This set contains the set of urls that have been queried from the database; thus, 
+the urls that have been processed. It is important to have this here so that we do not crawl urls that have
+already been processed.
+This function will accept a list of seed pages (urls).
+
+Note that python automatically uses pass by reference with lists.
+'''
+def crawl_(seedList, depth=4):
+    '''TO DO:We need to find a way of being able to search through the urls much faster; consider a lookup table, as these have constant search time.'''
+
+    #Maintain a set of all the visited urls.
+    visitedUrls = globalProcessedUrlSet.copy()#Copy the global set. Also note that in the end, the globalProcessedSet will be a subset of the visitedUrls set.
+    	#This is due to the fact that urls must first be visited and then processed.
+    for seed in seedList:
+    	urlQueue = list()#Set up the local queue. The intention is to have an empty queue whenever we start crawling from a new seed page.
+    	urlQueue.append(seed)#Enqueue seed url.
+    	globalUrlQueue.append(seed)#Enqueue seed url.
+    	visitedUrls.add(seed)#Add seed to the set of visited urls.
+    	#Perform a breadth first search to the specified depth.
+    	for i in range(depth):
+        	if (len(urlQueue) == 0):#No urls in queue.
+            	return#There are no urls to search.
+        
+        	currentUrl = urlQueue.pop(0)#Get (dequeue) first url in queue.
+        
+        	try:
+        		currentPage = request.urlopen(currentUrl)#Create a handle to the web resource.
+        	except: 
+        		print("Could not open page.")
+            	continue 
+
+        	'''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
+        	soup = BeautifulSoup(currentPage.read())
+
+        	'''Note that all links will be contained within the "href" attribute of the "a" tag. Thus, find all instances of this tag.'''
+        	adjacentLinks = soup.find_all('a')
+
+        	'''Approach: We are viewing the web as a large directed cyclic graph, that we will be performing a breadth first search on, up to a specifed depth. Each web address is viewed as a node (of the graph), and each url on the current web address will be viewd as an adjacent node to the current node (current web address). Thus, we shall now iterate over all of the adjacent nodes, adding them to our url queue.'''
+
+        	for link in adjacentLinks:#Iterate over all links found on the current page.
+         	   '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
+            	if (link.get('href') != None):
+                	newUrl = urljoin(currentUrl, link.get('href'))#Join base url (current url) with url on current page.
+                	if (newUrl not in visitedUrls):
+                    	urlQueue.append(newUrl)#Append the new url to the queue.
+                    	globalUrlQueue.append(newUrl)#Append the new url to the global queue.
+                    	visitedUrls.add(newUrl)#Add the new url to the set of visited urls.
+
+
+
+def processUrlQueue():
 	while(1):
 		#TODO: Derive a means of breaking from this loop. What conditions must be met.
-		if (not urlQueue):#Queue is empty.
+
+		if (not globalUrlQueue):#Queue is empty.
 			time.sleep(1)#sleep for one second.
 			continue#Skip the rest of instructions in current iteration.
 		#Dequeue element from queue and process it.
-		currentUrl = urlQueue.pop(0)#Get first element in queue.
+		currentUrl = globalUrlQueue.pop(0)
 		if (currentUrl in globalProcessedUrlSet):
 			continue#url is already in database.
-		#TODO: Classify web resource.
+
+		urlClass = classifyUrl(currentUrl)#Classify the url.
+		
 		#TODO: Store important information in database.
 
 
-#TODO: Create thread to crawl the web.
-#TODO: Create thread to process the url queue.
-
-crawler_thread = threading.Thread(target=crawl_, args=(globalUrlQueue, globalProcessedUrlSet, seedList, depth, ))
-url_processor_thread = threading.Thread(target=processedUrlQueue, args=(globalProcessedUrlSet, ))
+#Create thread to crawl the web.
+crawler_thread = threading.Thread(target=crawl_, args=(seedList, depth, ))
+#Create thread to process the url queue.
+url_processor_thread = threading.Thread(target=processedUrlQueue)
 
 #Start the crawler thread.
 crawler_thread.start()
