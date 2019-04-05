@@ -140,17 +140,6 @@ def normalize_list_of_strings(text_list):
 		new_list.append(normalize_text(l))
 	return new_list
 
-#print(normalize_text("Hey there how are you doing. aren't you haven't you've play the game a the"))
-text_corpus = ["Accept?s a? l45i^st of strings as input, and then normalizes each string",
-"Given an input string perform the following operations: expand contractions, lemmatize text,remove special characters,"]
-
-#text_corpus = normalize_list_of_strings(text_corpus)
-#print(text_corpus[0])
-#print(text_corpus[1])
-
-
-
-
 
 
 '''TODO: THE CODE BELOW IS NECESSARY. IT NEEDS TO BE INTEGRATED WITH THE ABOVE.'''
@@ -162,9 +151,6 @@ def normalize_corpus_of_strings_wordlemmatizing(text_list):
 		new_list.append(nltk.word_tokenize(l))
 	#Remove special characters.
 	return new_list
-
-
-#print(normalize_corpus_of_strings_wordlemmatizing(text_corpus)[0])
 
 
 

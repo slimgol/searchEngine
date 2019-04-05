@@ -8,6 +8,9 @@ def bow_extractor(corpus, ngram_range=(1,1)):
 	return vectorizer, features
 
 
+'''
+The following is for testing purposes only.
+
 CORPUS = [
 "good day sir how are you today", 
 "today is a lovely day for training",
@@ -23,3 +26,4 @@ new_features = bow_vectorizer.transform(["Hello sir how are you what a day for t
 new_features = new_features.todense()
 print(new_features)
 
+'''

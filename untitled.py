@@ -55,6 +55,7 @@ def trainModel():
 	#Instantiate the Multinomial Naive Bayes classifier.
 	classifier = MultinomialNB()
 
+	#TODO: The following name is deceiving as it is a list and not a set; change it.
 	#Form a normalized tagged dataset from a set of predefined, labeled urls.
 	normalized_labeled_set = trainTestData.createTaggedDataSet(seedPages.ENERGY_SEED_URLS)
 	
