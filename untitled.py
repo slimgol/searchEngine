@@ -86,6 +86,7 @@ def trainModel():
 	
 	#TODO: Split normalized_labeled_set into training and test sets.
 	#normalized_labeled_train, normalized_labeled_test --> derived from normalized_labeled_set
+	normalized_labeled_train, normalized_labeled_test = trainTestSplit(normalized_labeled_set)
 
 	#Create the train corpus, and their associated labels.
 	normalized_train_corpus = []
