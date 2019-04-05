@@ -3,14 +3,24 @@ from bs4 import BeautifulSoup
 import urllib2
 from urlparse import urljoin
 
-def crawl_(globalProcessedUrls, seedList, depth=4):
+'''
+globalUrlQueue- This is so that our "url processor" function can access the global queue 
+and process it. Thus, the url processor will classify the web resource and then store it in the database.
+initialProcessedUrls- This set contains the set of urls that have been queried from the database; thus, 
+the urls that have been processed. It is important to have this here so that we do not crawl urls that have
+already been processed.
+This function will accept a list of seed pages (urls).
+
+Note that python automatically uses pass by reference with lists.
+'''
+def crawl_(globalUrlQueue, initialProcessedUrls, seedList, depth=4):
     '''TO DO:We need to find a way of being able to search through the urls much faster; consider a lookup table, as these have constant search time.'''
 
-    processedUrls = set()#Set to stored the processed urls.
-    processedUrls = globalProcessedUrls#This is a set.
+    processedUrls = initialProcessedUrls#This is a set.
     for seed in seedList:
     	urlQueue = list()#Set up the local queue. The intention is to have an empty queue whenever we start crawling from a new seed page.
     	urlQueue.append(seed)#Enqueue seed url.
+    	globalUrlQueue.append(seed)#Enqueue seed url.
     	processedUrls.add(seed)
     	#Perform a breadth first search to the specified depth.
     	for i in range(depth):
@@ -18,7 +28,6 @@ def crawl_(globalProcessedUrls, seedList, depth=4):
             	return#There are no urls to search.
         
         	currentUrl = urlQueue.pop(0)#Get (dequeue) first url in queue.
-        	#processedUrls.add(currentUrl)#Add current url to the set.
         
         	try:
             	currentPage = urllib2.urlopen(currentUrl)#Open specified url.
@@ -29,8 +38,6 @@ def crawl_(globalProcessedUrls, seedList, depth=4):
         	'''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
         	soup = BeautifulSoup(currentPage.read())
 
-        	#TODO: Add to index.
-
         	'''Note that all links will be contained within the "href" attribute of the "a" tag. Thus, find all instances of this tag.'''
         	adjacentLinks = soup.find_all('a')
 
@@ -40,11 +47,11 @@ def crawl_(globalProcessedUrls, seedList, depth=4):
          	   '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
             	if (link.get('href') != None):
                 	newUrl = urljoin(currentUrl, link.get('href'))#Join base url (current url) with url on current page.
-                	#TODO: Do some more processing here.
                 	if (newUrl not in processedUrls):
                     	urlQueue.append(newUrl)#Append the new url to the queue.
+                    	globalUrlQueue.append(newUrl)
                     	processedUrls.add(newUrl)
-                	#print(newUrl)#Print the new url.
+
 
    
     
