@@ -26,7 +26,7 @@ import nltk
 from trainTestData import extractText#Used to extract text from a given url.
 from test import normalize_text#Used to normalize the extracted text.
 from sklearn.naive_bayes import MultinomialNB
-
+import random#Used for generating pseudorandom numbers.
 
 
 def train_predict_evaluate_model(classifier, train_features, train_labels, test_features, test_labels):
@@ -43,6 +43,31 @@ def train_predict_evaluate_model(classifier, train_features, train_labels, test_
 #Multinomial Naive Bayes with BOW features.
 mnb_bow_predictions = train_predict_evaluate_model(classifier=mnb, train_features=bow_train_features,train_labels=train_labels,test_features=bow_test_features,test_labels=test_labels)
 
+
+#TODO: Explain what this function does.
+def trainTestSplit(inputList, train_proportion=0.8):
+	LIST_LEN = len(inputList)#Length of the input list.
+	training_indices = set()#Maintain a set of the training indexes.
+	#Create lists to store the training instances and testing instances.
+	training_list = []
+	testing_list = []
+
+	for i in range(int(LIST_LEN*train_proportion)):
+		#Repeat until index has not been chosen.
+		while (1):
+			randIndex = random.randint(0,LIST_LEN-1)#Generate random integer between 0 and list length -1. (Note that if k is the length of the list then index k is not a valid index.)
+			if (randIndex not in training_indices):
+				break
+		#Add index to the set of training indices.
+		training_indices.add(randIndex)
+		#Append element to training list.
+		training_list.append(inputList[randIndex])
+	for i in range(LIST_LEN):
+		if (i not in training_indices):
+			testing_list.append(inputList[randIndex])
+
+	#Return the training and testing lists.
+	return training_list, testing_list
 
 #Create a function to train the model.
 #This function must check to determine whether or not the classifier has been trained.
