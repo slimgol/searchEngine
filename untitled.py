@@ -46,18 +46,22 @@ mnb_bow_predictions = train_predict_evaluate_model(classifier=mnb, train_feature
 
 #TODO: Explain what this function does.
 def trainTestSplit(inputList, train_proportion=0.8):
+	if (training_proportion > 1 || training_proportion < 0):
+		return None
+
 	LIST_LEN = len(inputList)#Length of the input list.
 	training_indices = set()#Maintain a set of the training indexes.
 	#Create lists to store the training instances and testing instances.
 	training_list = []
 	testing_list = []
 
+
 	for i in range(int(LIST_LEN*train_proportion)):
 		#Repeat until index has not been chosen.
 		while (1):
 			randIndex = random.randint(0,LIST_LEN-1)#Generate random integer between 0 and list length -1. (Note that if k is the length of the list then index k is not a valid index.)
 			if (randIndex not in training_indices):
-				break
+				break#We have found an index that has not yet been used.
 		#Add index to the set of training indices.
 		training_indices.add(randIndex)
 		#Append element to training list.
