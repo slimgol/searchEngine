@@ -48,8 +48,12 @@ mnb_bow_predictions = train_predict_evaluate_model(classifier=mnb, train_feature
 #This function must check to determine whether or not the classifier has been trained.
 #If not trained then train.
 #Otherwise, load model from storage.
-def trainModel(classifier):
+def trainModel():
 	#TODO: Test to determine whether or not the model has been trained and stored.
+	#If model is trained already, then load it from storage and return it to the calling function.
+
+	#Instantiate the Multinomial Naive Bayes classifier.
+	classifier = MultinomialNB()
 
 	#Form a normalized tagged dataset from a set of predefined, labeled urls.
 	normalized_labeled_set = trainTestData.createTaggedDataSet(seedPages.ENERGY_SEED_URLS)
@@ -80,12 +84,13 @@ def trainModel(classifier):
 	#Build model using the bow training features, and the corresponding labels.
 	classifier.fit(bow_train_features, train_labels)
 
+	#Return the trained classifier.
+	return classifier
 
 
+#Get trained classifier.
+classifier = trainModel()
 
-
-#TODO: Instantiate classifier here.
-mnb = MultinomialNB()
 
 #TODO: Explain what this function does.
 def classifyUrl(url):
