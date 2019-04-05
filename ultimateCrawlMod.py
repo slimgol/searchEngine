@@ -20,7 +20,7 @@
 
 from modifiedCrawler import crawl_
 import time #Will be used to force thread to sleep.
-
+import threading #Will be used to achieve parallelism.
 
 #Query database and store all urls in a set (globalProcessedUrlSet).
 
@@ -39,6 +39,24 @@ def processUrlQueue(urlQueue):
 			continue#url is already in database.
 		#TODO: Classify web resource.
 		#TODO: Store important information in database.
+
+
+#TODO: Create thread to crawl the web.
+#TODO: Create thread to process the url queue.
+
+crawler_thread = threading.Thread(target=crawl_, args=(globalUrlQueue, globalProcessedUrlSet, seedList, depth, ))
+url_processor_thread = threading.Thread(target=processedUrlQueue, args=(globalProcessedUrlSet, ))
+
+#Start the crawler thread.
+crawler_thread.start()
+#Start the url processor thread.
+url_processor_thread.start()
+
+
+crawler_thread.join()#Wait for thread to finish execution before executing the rest of instructions in the program.
+url_processor_thread.join()#Wait for the thread to finish execution before executing the rest of instructions in the program.
+
+
 
 
 
