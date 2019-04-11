@@ -20,16 +20,13 @@ Approach:
 '''
 
 import seedPages#Seed pages that will be used to get the training and test data for the classifier.
-import trainTestData #Import function to extract text from a given url, and normalize it, returning a list of pairs of the form (url, topic).
 import nltk
-from trainTestData import extractText#Used to extract text from a given url.
 from test import normalize_text#Used to normalize the extracted text.
 from sklearn.naive_bayes import MultinomialNB
 import random#Used for generating pseudorandom numbers.
 from sklearn.feature_extraction.text import CountVectorizer
 from bs4 import BeautifulSoup
 from urllib import request
-from test import normalize_text#Import function to normalize a string of text.
 import os
 from sklearn.externals import joblib#Used to achieve model persistence.
 
@@ -150,28 +147,45 @@ def trainTestSplit(inputList, train_proportion=0.8):
 
 
 '''
-This function accepts a given classifier and saves it to the file on disk, specified by the filename.
+This function accepts a given classifier and saves it to the file on disk, specified by the file name.
 '''
 def saveModel(classifierObj, fileName):
-	#Get current working directory, and create the full path.
-	fullPath = os.getcwd()+'/'+fileName
-	joblib.dump(classifierObj, fullPath)
+	joblib.dump(classifierObj, fileName)
 
+'''
+This function accepts a given filename and loads the model that is specified by the file name. 
+'''
 def loadModel(fileName):
-	return joblib.load(fullPath)
+	return joblib.load(fileName)
 
 
 
 '''
-This function does not accept any arguments. This function checks to determine if a model has been 
+This function has a single parameter, filename, which denotes the location of where the classifer exists,
+or where it is to be stored to. This function checks to determine if a model has been 
 trained and stored on the computer disk, if so, the function will load that model from the disk 
 and return it to the calling function, otherwise it will instantiate the model, train it, and then
 return it to the calling function.
+
+TODO: Perhaps we should have another parameter, which allows us to specify whether or not the 
+function should overwrite the model if it exists already.
 '''
 
-def trainModel():
+def trainModel(fileName):
 	#TODO: Test to determine whether or not the model has been trained and stored.
 	#If model is trained already, then load it from storage and return it to the calling function.
+
+	#Get the file file path name.
+	fullFilePathName = os.getcwd()+'/'+fileName
+
+	'''
+	Check to determine if the filename exists already. If so, then load the model from 
+	storage, and return it to the calling function.
+	'''
+	if (os.path.isfile(fullFilePathName)):
+		return loadModel(fullFilePathName)
+
+	#If above condition is not met, then perform the following...
 
 	#Instantiate the Multinomial Naive Bayes classifier.
 	classifier = MultinomialNB()
