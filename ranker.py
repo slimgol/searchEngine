@@ -11,8 +11,23 @@ Approach:
 	Focus on documentation. 
 '''
 
-def sortArray(newArray):
-	pass
+def sortArrayDescending(newArray):
+	SIZE = len(newArray)
+
+	for i in range(newArray):
+		for j in range(newArray-i-1):
+			if (newArray[j]<newArray[j+1]):
+				#Swap elements
+				temp = newArray[j]
+				newArray[j] = newArray[j+1]
+				newArray[j+1] = temp
+
+	url_array = []
+	
+	for pair_ in newArray:
+		url_array.append(pair_[0])
+
+	return url_array
 
 
 '''
@@ -40,30 +55,39 @@ def urlScore(url, termsSet, topicWeight = 1.75):
 
 	#Calcualte term frequencies; determine the number of tokens in the text.
 	termsFrequency = 0.0
+	numTokens = 0#Used to store the number of tokens.
 
 	'''
 	Todo: Determine whether or not the topic should be weighted heavier.
 	'''
 	for token in normalizedTokensList:
+		numTokens += 1
 		if (token in termsSet):
 			if (token == topic):
 				termsFrequency += topicWeight
 			else:
 				termsFrequency += 1
 
+	#Note: The following should not occur.
+	if (numTokens == 0):
+		return None 
 
-	#Calculate the number of tokens per word.
-
-	#Return the normalized score.
-	pass
+	#Return the score.
+	return termsFrequency/numTokens
 
 
 
 def rankUrls(urlList, searchTerm, topic):
-	#Remove stop-words from the searchTerm.
+	#Normalize the raw input search term.
+	normalizedSearchTerm = normalize_text(searchTerm)
 
-	#Create a set from the search terms. Add the topic if it is not already included in the set. 
-	#This set shall be called the terms set.
+	#Create array of tokens from the normalized search term.
+	normalizedSearchTokens = normalizedSearchTerm.split()
+
+	#TODO:
+	#Ensure that all of the search tokens are converted to lower case.
+	if (topic not in normalizedSearchTokens):
+		normalizedSearchTokens.append(topic)#Add the topic to the list of search terms.
 
 	#Create empty array to store the urls and their associated scores.
 	scored_urls = []
@@ -71,8 +95,24 @@ def rankUrls(urlList, searchTerm, topic):
 	#Iterate over all of the urls, and calculate the scores for the urls.
 	#Add the url and the score to the scored urls array.
 
-	#Rank the scored urls and return an array containing only the ranked urls.
+	'''
+	Iterate over all of the urls, calculate their scores, and then add them to the scored url array.
+	'''
+	for url in urlList:
+		score = urlScore(url, normalizedSearchTokens)
+		if (score == None):
+			continue#Skip the rest of instructions in the current iteration.
 
+		scored_urls.append((url, score))
+
+
+	#Rank the scored urls and return an array containing only the ranked urls.
+	'''
+	sortArrayDescending will accept a list of tuples of the form, (url, score), and return 
+	the sorted list of urls, without the score. Hence, the function will just return the 
+	sorted list of urls.
+	'''
+	sortedUrls = sortArrayDescending(scored_urls)
 
 	
 
