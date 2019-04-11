@@ -1,3 +1,8 @@
+'''
+This module is built for python3.
+This module contains functions that are used for data normalization.
+'''
+
 import nltk
 from nltk.corpus import state_union
 from nltk.corpus import wordnet as wn

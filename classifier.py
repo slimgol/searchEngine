@@ -21,7 +21,7 @@ Approach:
 
 import seedPages#Seed pages that will be used to get the training and test data for the classifier.
 import nltk
-from test import normalize_text#Used to normalize the extracted text.
+from normalizer import normalize_text#Used to normalize the extracted text.
 from sklearn.naive_bayes import MultinomialNB
 import random#Used for generating pseudorandom numbers.
 from sklearn.feature_extraction.text import CountVectorizer
@@ -250,8 +250,10 @@ def trainModel(fileName):
 	return classifier
 
 
+#Specify the file name. Note that the 'pkl' file name extension is necessary for storing the classifier.
+FILE = 'MNBClassifier.pkl'
 #Get trained classifier.
-classifier = trainModel()
+classifier = trainModel(FILE)
 
 
 
@@ -259,6 +261,7 @@ classifier = trainModel()
 This function accepts a raw url, reads the content of the web-page from the url, normalizes the
 text, and uses the trained classifier to make a prediction.
 This function then returns the prediction to the calling function.
+Teh prediction is an integer, which corresponds to one of the classes of renewable energy.
 '''
 
 def classifyUrl(url):
@@ -266,12 +269,14 @@ def classifyUrl(url):
 	if (text == None):
 		return None
 	#Normalize text.
-	normalizedText = normalize_text(text)
+	normalizedString = normalize_text(text)
 	#Create bag of words features from the normalized text. We will use our pre-trained bow vectorizer.
-	bow_features = bow_vectorizer.transform([normalizedText])#Note that "transform" method accepts a list of strings.
+	bow_features = bow_vectorizer.transform([normalizedString])#Note that "transform" method accepts a list of strings.
 	#Make prediction.
 	prediction = classifier.predict(bow_features)
-	return prediction #TODO: Explain what data type is returned, and also whatelese needs to be done.
+	#Prediction will be an array of integers (of length 1 in this case).
+	#The first element in the array will contain the integer class.
+	return prediction[0] #TODO: Explain what data type is returned, and also whatelese needs to be done.
 
 
 

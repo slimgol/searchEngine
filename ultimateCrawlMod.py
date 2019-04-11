@@ -1,9 +1,22 @@
+'''
+This program is built for python3.
+This program provides functions for crawling and indexing the web.
+The approach is as follows:
+    Two threads will be executed simultaneously...
+
+TODO: This program needs revision. Also, convert this program into a module by creating 
+a function which must be invoked to start the threads, which in-turn take care of executing
+each of the corresponding functions.
+'''
+
+
+
 from bs4 import BeautifulSoup
 from urllib import request
 from urllib.parse import urljoin
 import time #Will be used to force thread to sleep.
 import threading #Will be used to achieve parallelism.
-from untitled import classifyUrl #Function to classify urls.
+from classifier import classifyUrl #Function to classify urls.
 
 '''
 Approach:
@@ -57,10 +70,16 @@ def crawl_(seedList, depth=4):
         	'''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
         	soup = BeautifulSoup(currentPage.read())
 
-        	'''Note that all links will be contained within the "href" attribute of the "a" tag. Thus, find all instances of this tag.'''
+        	'''Note that all links will be contained within the "href" attribute of the "a" tag. 
+            Thus, find all instances of this tag.'''
         	adjacentLinks = soup.find_all('a')
 
-        	'''Approach: We are viewing the web as a large directed cyclic graph, that we will be performing a breadth first search on, up to a specifed depth. Each web address is viewed as a node (of the graph), and each url on the current web address will be viewd as an adjacent node to the current node (current web address). Thus, we shall now iterate over all of the adjacent nodes, adding them to our url queue.'''
+        	'''Approach: We are viewing the web as a large directed cyclic graph, 
+            that we will be performing a breadth first search on, up to a specifed depth. 
+            Each web address is viewed as a node (of the graph), and each url on the current 
+            web address will be viewd as an adjacent node to the current node 
+            (current web address). Thus, we shall now iterate over all of the adjacent nodes,
+             adding them to our url queue.'''
 
         	for link in adjacentLinks:#Iterate over all links found on the current page.
          	   '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
