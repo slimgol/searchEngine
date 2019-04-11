@@ -30,7 +30,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bs4 import BeautifulSoup
 from urllib import request
 from test import normalize_text#Import function to normalize a string of text.
-
+import os
+from sklearn.externals import joblib#Used to achieve model persistence.
 
 
 '''
@@ -148,6 +149,18 @@ def trainTestSplit(inputList, train_proportion=0.8):
 	return training_list, testing_list
 
 
+'''
+This function accepts a given classifier and saves it to the file on disk, specified by the filename.
+'''
+def saveModel(classifierObj, fileName):
+	#Get current working directory, and create the full path.
+	fullPath = os.getcwd()+'/'+fileName
+	joblib.dump(classifierObj, fullPath)
+
+def loadModel(fileName):
+	return joblib.load(fullPath)
+
+
 
 '''
 This function does not accept any arguments. This function checks to determine if a model has been 
@@ -193,6 +206,10 @@ def trainModel():
 
 	#Build model using the bow training features, and the corresponding labels.
 	classifier.fit(bow_train_features, train_labels)
+
+	#Save the model to disk for future use.
+	#TODO: Save the model to disk.
+
 
 	#Return the trained classifier.
 	return classifier
