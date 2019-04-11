@@ -125,7 +125,11 @@ def remove_special_chars(text):
 	lemmatize text,
 	remove special characters,
 	remove stopwords,
-	return the resultant string.'''
+	return the resultant string.
+	
+	TODO:
+		Convert all text to lowercase.
+	'''
 def normalize_text(text):
 	text = expandContractions(text)#String of words.
 	tagged = nltk.pos_tag(text.split())#List of tuples.
