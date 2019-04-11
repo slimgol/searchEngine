@@ -117,6 +117,7 @@ contains the training pairs, and the second list contains the testing pairs; bot
 (url, topic).
 '''
 
+#TODO: This function is inefficient... Think about what it is and fix it.
 def trainTestSplit(inputList, train_proportion=0.8):
 	if (training_proportion > 1 || training_proportion < 0):
 		return None
@@ -127,6 +128,12 @@ def trainTestSplit(inputList, train_proportion=0.8):
 	training_list = []
 	testing_list = []
 
+	'''
+	Set the seed of the pseudorandom to any arbitrary integer. This will ensure the, same sequence 
+	of random numbers are called, at the beginning of every invocation of the pseudorandom number
+	generator. This is ideal for testing purposes, as it makes the system more deterministic.
+	'''
+	random.seed(10)#Any arbitrary integer will do the job.
 
 	for i in range(int(LIST_LEN*train_proportion)):
 		#Repeat until index has not been chosen.
@@ -146,11 +153,13 @@ def trainTestSplit(inputList, train_proportion=0.8):
 	return training_list, testing_list
 
 
+
 '''
 This function accepts a given classifier and saves it to the file on disk, specified by the file name.
 '''
 def saveModel(classifierObj, fileName):
 	joblib.dump(classifierObj, fileName)
+
 
 '''
 This function accepts a given filename and loads the model that is specified by the file name. 
@@ -172,10 +181,8 @@ function should overwrite the model if it exists already.
 '''
 
 def trainModel(fileName):
-	#TODO: Test to determine whether or not the model has been trained and stored.
-	#If model is trained already, then load it from storage and return it to the calling function.
 
-	#Get the file file path name.
+	#Get the current working directory, and create the full path of the file.
 	fullFilePathName = os.getcwd()+'/'+fileName
 
 	'''
@@ -185,7 +192,17 @@ def trainModel(fileName):
 	if (os.path.isfile(fullFilePathName)):
 		return loadModel(fullFilePathName)
 
+
 	#If above condition is not met, then perform the following...
+
+	'''====================================================================================================
+	The following applies to building the classifier:
+	->	The Bag-of-words feature extractor accepts a list of strings.
+	->	The Bag-of-words vectorizer accepts a list of strings.
+	->	normalized_train_corpus contains all of the pairs of the form, (normalized string from url, topic).
+	->	normalized_train_corpus and normalized_test_corpus are both arrays of strings.
+	->	train_labels and test_labels are both arrays containing integers, which represent topics.
+	======================================================================================================='''
 
 	#Instantiate the Multinomial Naive Bayes classifier.
 	classifier = MultinomialNB()
@@ -194,9 +211,10 @@ def trainModel(fileName):
 	#Form a normalized tagged dataset from a set of predefined, labeled urls.
 	normalized_labeled_set = createTaggedDataSet(seedPages.ENERGY_SEED_URLS)
 	
-	#TODO: Split normalized_labeled_set into training and test sets.
-	#normalized_labeled_train, normalized_labeled_test --> derived from normalized_labeled_set
+	#Split normalized_labeled_set into training and test sets.
+	#normalized_labeled_train, normalized_labeled_test --> derived from normalized_labeled_set.
 	normalized_labeled_train, normalized_labeled_test = trainTestSplit(normalized_labeled_set)
+
 
 	#Create the train corpus, and their associated labels.
 	normalized_train_corpus = []
@@ -205,6 +223,7 @@ def trainModel(fileName):
 		normalized_train_corpus.append(pair[0])#Text.
 		train_labels.append(pair[1])#Label
 
+
 	#Create the test corpus, and their associated labels.
 	normalized_test_corpus = []
 	test_labels = []
@@ -212,18 +231,20 @@ def trainModel(fileName):
 		normalized_test_corpus.append(pair[0])#Text
 		test_labels.append(pair[1])#Label
 
+
 	#Bag-of-words features.
 	#Train bow vectorizer on the normalized train corpus.
 	bow_vectorizer, bow_train_features = bow_extractor(normalized_train_corpus)
 	#Use the trained vectorizer to transform the normalized test corpus, to create the bag of words for the normalized test corpus.
 	bow_test_features = bow_vectorizer.transform(normalized_test_corpus)
 
+
 	#Build model using the bow training features, and the corresponding labels.
 	classifier.fit(bow_train_features, train_labels)
 
-	#Save the model to disk for future use.
-	#TODO: Save the model to disk.
 
+	#Save the model to disk for future use.
+	saveModel(fullFilePathName)
 
 	#Return the trained classifier.
 	return classifier
