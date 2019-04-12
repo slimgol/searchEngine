@@ -162,7 +162,7 @@ def trainTestSplit(seedUrls, train_proportion=0.8):
 		
 		#Add index to the set of training indices.
 		training_indices.add(randIndex)
-		#TODO: Explain what is being done here.
+		#TODO: Explain what is being done below.
 		train_x.append(inputList[randIndex][0])#Text
 		train_y.append(inputList[randIndex][1])#Label
 	
@@ -170,12 +170,10 @@ def trainTestSplit(seedUrls, train_proportion=0.8):
 	#TODO: Explain what is being done below.
 	for i in range(LIST_LEN):
 		if (i not in training_indices):
-			#testing_list.append(inputList[randIndex])
-			test_x.append(inputList[randIndex][0])#Text
-			test_y.append(inputList[randIndex][1])#Label
+			test_x.append(inputList[i][0])#Text
+			test_y.append(inputList[i][1])#Label
 
-	#Return the training and testing lists.
-	#return training_list, testing_list
+	#TODO: Explain what is being returned to the calling function.
 	return train_x,train_y,test_x,test_y
 
 
@@ -214,7 +212,7 @@ TODO:
 	function should only take care of training the model on the training dataset.
 '''
 
-def trainModel(fileName):
+def trainModel(fileName, train_x, train_y, test_x, test_y):
 
 	#Get the current working directory, and create the full path of the file.
 	fullFilePathName = os.getcwd()+'/'+fileName
@@ -241,59 +239,40 @@ def trainModel(fileName):
 	#Instantiate the Multinomial Naive Bayes classifier.
 	classifier = MultinomialNB()
 
-	#TODO: The following name is deceiving as it is a list and not a set; change it.
-	#Form a normalized tagged dataset from a set of predefined, labeled urls.
-	normalized_labeled_set = createTaggedDataSet(seedPages.ENERGY_SEED_URLS)
-	
-	#Split normalized_labeled_set into training and test sets.
-	#normalized_labeled_train, normalized_labeled_test --> derived from normalized_labeled_set.
-	normalized_labeled_train, normalized_labeled_test = trainTestSplit(normalized_labeled_set)
-
-
-	#Create the train corpus, and their associated labels.
-	normalized_train_corpus = []
-	train_labels = []
-	for pair in normalized_labeled_train:
-		normalized_train_corpus.append(pair[0])#Text.
-		train_labels.append(pair[1])#Label
-
-
-	#Create the test corpus, and their associated labels.
-	normalized_test_corpus = []
-	test_labels = []
-	for pair in normalized_labeled_test:
-		normalized_test_corpus.append(pair[0])#Text
-		test_labels.append(pair[1])#Label
-
 
 	#Bag-of-words features.
 	#Train bow vectorizer on the normalized train corpus.
-	bow_vectorizer, bow_train_features = bow_extractor(normalized_train_corpus)
+	bow_vectorizer, bow_train_features = bow_extractor(train_x)
 	#Use the trained vectorizer to transform the normalized test corpus, to create the bag of words for the normalized test corpus.
-	bow_test_features = bow_vectorizer.transform(normalized_test_corpus)
+	bow_test_features = bow_vectorizer.transform(test_x)
 
 
 	#Build model using the bow training features, and the corresponding labels.
 	classifier.fit(bow_train_features, train_labels)
 
+	print(classifier.predict(bow_test_features))
+	print(test_y)
 
 	#Save the model to disk for future use.
 	saveModel(classifier, fullFilePathName)
 
-	#######
-	predictions = classifier.predict(bow_test_features)
-	print(predictions+"\n\n\n\n")
-	print(test_labels)
-	#######
-
 	#Return the trained classifier.
-	return classifier#, bow_test_features, test_labels
+	return classifier
+
+
 
 
 #Specify the file name. Note that the 'pkl' file name extension is necessary for storing the classifier.
 FILE = 'MNBClassifier.pkl'
+
+
+
+#Get training and testing datasets.
+#TODO: If the classifier is trained already then we do not have to do this.
+train_text,train_target,test_text,test_target = trainTestSplit(seedPages.ENERGY_SEED_URLS)
+
 #Get trained classifier.
-clf = trainModel(FILE)
+clf = trainModel(FILE, train_text, train_target, test_text, test_target)
 
 
 
