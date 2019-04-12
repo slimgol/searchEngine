@@ -115,18 +115,35 @@ The training proportion is used to indicate how much of the input training data 
 training and how much is used for testing. This function then returns two lists. The first list
 contains the training pairs, and the second list contains the testing pairs; both of the form
 (url, topic).
+
+Approach:
+Accept a list of pairs, (url, topic).
+Extract text from the web-page that the url references, and normalize it.
+Form array of pairs, (extracted normalized text from url, topic).
+
+
+Output:
+Array of training urls, Array of corresponding training topics, Array of testing urls, Array of testing topics.
 '''
 
 #TODO: This function is inefficient... Think about what it is and fix it.
-def trainTestSplit(inputList, train_proportion=0.8):
-	if (training_proportion > 1 || training_proportion < 0):
+def trainTestSplit(seedUrls, train_proportion=0.8):
+	if (train_proportion > 1 or train_proportion < 0):
 		return None
 
-	LIST_LEN = len(inputList)#Length of the input list.
+	#TODO: The following name is deceiving as it is a list and not a set; change it.
+	#Form a normalized tagged dataset from a set of predefined, labeled urls.
+	#Array of pairs of the form (normalized text from url, topic).
+	normalized_labeled_set = createTaggedDataSet(seedUrls)
+
+	LIST_LEN = len(normalized_labeled_set)#Length of the input list.
 	training_indices = set()#Maintain a set of the training indexes.
-	#Create lists to store the training instances and testing instances.
-	training_list = []
-	testing_list = []
+
+	#TODO: Explain what each of these empty lists are for.
+	train_x = []
+	train_y = []
+	test_x = []
+	test_y = []
 
 	'''
 	Set the seed of the pseudorandom to any arbitrary integer. This will ensure the, same sequence 
@@ -135,22 +152,31 @@ def trainTestSplit(inputList, train_proportion=0.8):
 	'''
 	random.seed(10)#Any arbitrary integer will do the job.
 
+	#TODO: Explain what is being done below.
 	for i in range(int(LIST_LEN*train_proportion)):
 		#Repeat until index has not been chosen.
 		while (1):
 			randIndex = random.randint(0,LIST_LEN-1)#Generate random integer between 0 and list length -1. (Note that if k is the length of the list then index k is not a valid index.)
 			if (randIndex not in training_indices):
 				break#We have found an index that has not yet been used.
+		
 		#Add index to the set of training indices.
 		training_indices.add(randIndex)
-		#Append element to training list.
-		training_list.append(inputList[randIndex])
+		#TODO: Explain what is being done here.
+		train_x.append(inputList[randIndex][0])#Text
+		train_y.append(inputList[randIndex][1])#Label
+	
+
+	#TODO: Explain what is being done below.
 	for i in range(LIST_LEN):
 		if (i not in training_indices):
-			testing_list.append(inputList[randIndex])
+			#testing_list.append(inputList[randIndex])
+			test_x.append(inputList[randIndex][0])#Text
+			test_y.append(inputList[randIndex][1])#Label
 
 	#Return the training and testing lists.
-	return training_list, testing_list
+	#return training_list, testing_list
+	return train_x,train_y,test_x,test_y
 
 
 
@@ -169,15 +195,23 @@ def loadModel(fileName):
 
 
 
+
 '''
 This function has a single parameter, filename, which denotes the location of where the classifer exists,
 or where it is to be stored to. This function checks to determine if a model has been 
 trained and stored on the computer disk, if so, the function will load that model from the disk 
 and return it to the calling function, otherwise it will instantiate the model, train it, and then
 return it to the calling function.
+This function will create the training set and the testing set, as well as split each set into 
+the input instances and their corresponding labels (target values).
 
-TODO: Perhaps we should have another parameter, which allows us to specify whether or not the 
-function should overwrite the model if it exists already.
+TODO: 
+	-Perhaps we should have another parameter, which allows us to specify whether or not the 
+	function should overwrite the model if it exists already.
+	-The training and testing sets should be formed outside of this function, and then the
+	training set should be passed as an argument to this function.
+	Thus, the splitting of the datasets should be handled by a separate function, and then this
+	function should only take care of training the model on the training dataset.
 '''
 
 def trainModel(fileName):
@@ -244,16 +278,22 @@ def trainModel(fileName):
 
 
 	#Save the model to disk for future use.
-	saveModel(fullFilePathName)
+	saveModel(classifier, fullFilePathName)
+
+	#######
+	predictions = classifier.predict(bow_test_features)
+	print(predictions+"\n\n\n\n")
+	print(test_labels)
+	#######
 
 	#Return the trained classifier.
-	return classifier
+	return classifier#, bow_test_features, test_labels
 
 
 #Specify the file name. Note that the 'pkl' file name extension is necessary for storing the classifier.
 FILE = 'MNBClassifier.pkl'
 #Get trained classifier.
-classifier = trainModel(FILE)
+clf = trainModel(FILE)
 
 
 

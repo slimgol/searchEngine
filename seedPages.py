@@ -1,6 +1,6 @@
-topic_codes = {'Geothermal Energy':0, 'Wind Energy': 1, 'Hydropower': 2, 'Biomass Energy': 3}
+topic_codes = {0: 'Geothermal Energy', 1: 'Wind Energy', 2: 'Hydropower', 3: 'Biomass Energy', 4: 'Solar Energy'}
 
-#TODO: Explain what this list is for.
+
 
 ENERGY_SEED_URLS = [('https://www.energy.gov/eere/geothermal/geothermal-faqs',0),
 ('https://www.energy.gov/eere/geothermal/geothermal-basics',0),
