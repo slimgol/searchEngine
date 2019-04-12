@@ -163,15 +163,15 @@ def trainTestSplit(seedUrls, train_proportion=0.8):
 		#Add index to the set of training indices.
 		training_indices.add(randIndex)
 		#TODO: Explain what is being done below.
-		train_x.append(inputList[randIndex][0])#Text
-		train_y.append(inputList[randIndex][1])#Label
+		train_x.append(normalized_labeled_set[randIndex][0])#Text
+		train_y.append(normalized_labeled_set[randIndex][1])#Label
 	
 
 	#TODO: Explain what is being done below.
 	for i in range(LIST_LEN):
 		if (i not in training_indices):
-			test_x.append(inputList[i][0])#Text
-			test_y.append(inputList[i][1])#Label
+			test_x.append(normalized_labeled_set[i][0])#Text
+			test_y.append(normalized_labeled_set[i][1])#Label
 
 	#TODO: Explain what is being returned to the calling function.
 	return train_x,train_y,test_x,test_y
@@ -239,7 +239,8 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 	#Instantiate the Multinomial Naive Bayes classifier.
 	classifier = MultinomialNB()
 
-
+	#TODO: Extract these features as a separate procedure from this function, and then pass the results as
+		#arguments to the function. Or perhaps we can save the vectorizer to the disk.
 	#Bag-of-words features.
 	#Train bow vectorizer on the normalized train corpus.
 	bow_vectorizer, bow_train_features = bow_extractor(train_x)
@@ -248,7 +249,7 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 
 
 	#Build model using the bow training features, and the corresponding labels.
-	classifier.fit(bow_train_features, train_labels)
+	classifier.fit(bow_train_features, train_y)
 
 	print(classifier.predict(bow_test_features))
 	print(test_y)
@@ -273,6 +274,7 @@ train_text,train_target,test_text,test_target = trainTestSplit(seedPages.ENERGY_
 
 #Get trained classifier.
 clf = trainModel(FILE, train_text, train_target, test_text, test_target)
+
 
 
 

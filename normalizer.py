@@ -49,7 +49,7 @@ def tokenize(text):
 #words = nltk.word_tokenize(tokenized[0])
 #tagged = nltk.pos_tag(words)
 
-print(tokenize("Hello, how are you? Play the game, and win"))
+
 
 '''Convert POS form into a form that can be handled by the WordNetLemmatizer lemmatizer.'''
 def convert_to_wn(tagged_text):
@@ -105,7 +105,7 @@ def remove_stopwords(text):
 	#Create a new list without the stopwords.
 	for t in text_list:
 		if t not in stopwords:
-			new_text.append(t)
+			new_text.append(t.lower())
 	'''Return a string- the string will be all of the elements of the list concatenated 
 		together, with a single whitespace between each element.'''
 	return ' '.join(new_text)#Convert array of words to string of words, and return to the calling function.
