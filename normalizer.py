@@ -104,8 +104,9 @@ def remove_stopwords(text):
 	new_text = []
 	#Create a new list without the stopwords.
 	for t in text_list:
+		t = t.lower()
 		if t not in stopwords:
-			new_text.append(t.lower())
+			new_text.append(t)
 	'''Return a string- the string will be all of the elements of the list concatenated 
 		together, with a single whitespace between each element.'''
 	return ' '.join(new_text)#Convert array of words to string of words, and return to the calling function.
