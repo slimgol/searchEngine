@@ -80,7 +80,7 @@ def crawl_(seed, depth=4):
                 if (alike_flag):
                     continue
 
-
+                #Below condition is not needed.
                 #TODO: Do some more processing here.
                 if (newUrl not in processedUrls):
                     urlQueue.append(newUrl)#Append the new url to the queue.

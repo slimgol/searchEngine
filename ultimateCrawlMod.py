@@ -7,6 +7,12 @@ The approach is as follows:
 TODO: This program needs revision. Also, convert this program into a module by creating 
 a function which must be invoked to start the threads, which in-turn take care of executing
 each of the corresponding functions.
+
+Optimizing Performance:
+Derive a way of measuring the quality of links. 
+Perhaps we can form a hybrid search- a mix between BFS and DFS... Perhaps when we come across a very high
+quality link (where the quality exceeds some predefined threshold), then we start another thread of execution to run 
+in parallel to perform a DFS on that quality node.
 '''
 
 
@@ -94,22 +100,33 @@ def crawl_(seedList, depth=4):
                     ==Iterate over all of the visited urls, and determine whether or not the new url is 
                     ==either a sub-string or a super-string of any of the urls in the set of urls that have
                     ==been visited already.
+                    ==alike_flag: if set to True, this means that there is a very similar url which has 
+                    ==been visited already.
+                    ==If alike_flag is set to true, then do not do any futher processing on that url; skip 
+                    ==to the next iteration of the for loop. 
                     ======================================================================================='''
-                    alike_flag = False
+                    '''alike_flag = False
                     for tempUrlStr in visitedUrls:
-                        if (tempUrlStr in newUrl or newUrl in tempUrlStr):
-                        alike_flag = True
+                        if (tempUrlStr in newUrl or newUrl in tempUrlStr): 
+                            alike_flag = True
 
                     if (alike_flag):
-                        continue
+                        continue'''
                     #########################
                     #### NEWLY ADDED END ####  
                     #########################
+
+                    
 
                     if (newUrl not in visitedUrls):
                         urlQueue.append(newUrl)#Append the new url to the queue.
                         globalUrlQueue.append(newUrl)#Append the new url to the global queue.
                         visitedUrls.add(newUrl)#Add the new url to the set of visited urls.
+                    '''
+                    urlQueue.append(newUrl)#Append the new url to the queue.
+                    globalUrlQueue.append(newUrl)#Append the new url to the global queue.
+                    visitedUrls.add(newUrl)#Add the new url to the set of visited urls.
+                    '''
 
 
 '''
