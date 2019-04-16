@@ -11,6 +11,14 @@ from bs4 import BeautifulSoup
 from urllib import request
 from urllib.parse import urljoin
 
+
+def getSubDomain(url):
+    try:
+        return urlparse(url).netloc
+    except:
+        return None 
+
+
 def crawl_(seed, depth=4):
     '''TO DO:We need to find a way of being able to search through the urls much faster; consider a lookup table, as these have constant search time.'''
 
@@ -51,6 +59,28 @@ def crawl_(seed, depth=4):
             '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
             if (link.get('href') != None):
                 newUrl = urljoin(currentUrl, link.get('href'))#Join base url (current url) with url on current page.
+                '''==============================================================================
+                Get the sub-domain of the extracted url, and then prepend "http://www." to the 
+                sub-domain of the extracted url above.
+                =================================================================================='''
+                '''
+                subDomain = getSubDomain(newUrl)
+                if (subDomain == None):
+                    continue
+
+                newUrl = "http://www."+subDomain
+                #####
+                '''
+                print(link.get('href'))
+                alike_flag = False
+                for tempUrlStr in processedUrls:
+                    if (tempUrlStr in newUrl or newUrl in tempUrlStr):
+                        alike_flag = True
+
+                if (alike_flag):
+                    continue
+
+
                 #TODO: Do some more processing here.
                 if (newUrl not in processedUrls):
                     urlQueue.append(newUrl)#Append the new url to the queue.

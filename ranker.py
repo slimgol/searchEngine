@@ -9,6 +9,10 @@ Approach:
 
 	what is a good algorithm for ranking the documents?
 	Focus on documentation. 
+
+
+TODO:
+	Create a max heap, and then use the heap sort algorithm to sort it.
 '''
 
 def sortArrayDescending(newArray):
@@ -23,7 +27,7 @@ def sortArrayDescending(newArray):
 				newArray[j+1] = temp
 
 	url_array = []
-	
+
 	for pair_ in newArray:
 		url_array.append(pair_[0])
 

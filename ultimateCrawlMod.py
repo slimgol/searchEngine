@@ -50,48 +50,69 @@ def crawl_(seedList, depth=4):
     visitedUrls = globalProcessedUrlSet.copy()#Copy the global set. Also note that in the end, the globalProcessedSet will be a subset of the visitedUrls set.
     	#This is due to the fact that urls must first be visited and then processed.
     for seed in seedList:
-    	urlQueue = list()#Set up the local queue. The intention is to have an empty queue whenever we start crawling from a new seed page.
-    	urlQueue.append(seed)#Enqueue seed url.
-    	globalUrlQueue.append(seed)#Enqueue seed url.
-    	visitedUrls.add(seed)#Add seed to the set of visited urls.
+        urlQueue = list() #Set up the local queue. The intention is to have an empty queue whenever we start crawling from a new seed page.
+        urlQueue.append(seed) #Enqueue seed url.
+        globalUrlQueue.append(seed) #Enqueue seed url.
+        visitedUrls.add(seed)  #Add seed to the set of visited urls.
     	#Perform a breadth first search to the specified depth.
-    	for i in range(depth):
-        	if (len(urlQueue) == 0):#No urls in queue.
-            	return#There are no urls to search.
+        for i in range(depth):
+            if(len(urlQueue)==0): #No urls in queue.
+                return None #There are no urls to search.
         
-        	currentUrl = urlQueue.pop(0)#Get (dequeue) first url in queue.
+            currentUrl = urlQueue.pop(0) #Get (dequeue) first url in queue.
         
-        	try:
-        		currentPage = request.urlopen(currentUrl)#Create a handle to the web resource.
-        	except: 
-        		print("Could not open page.")
-            	continue 
+            try:
+                currentPage = request.urlopen(currentUrl) #Create a handle to the web resource.
+            except: 
+                print("Could not open page.")
+                continue 
 
-        	'''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
-        	soup = BeautifulSoup(currentPage.read())
+            '''Create object (of the BeautifulSoup class) to parse the HTML on currentPage.'''
+            soup = BeautifulSoup(currentPage.read())
 
-        	'''Note that all links will be contained within the "href" attribute of the "a" tag. 
+            '''Note that all links will be contained within the "href" attribute of the "a" tag. 
             Thus, find all instances of this tag.'''
-        	adjacentLinks = soup.find_all('a')
+            adjacentLinks = soup.find_all('a')
 
-        	'''Approach: We are viewing the web as a large directed cyclic graph, 
+            '''Approach: We are viewing the web as a large directed cyclic graph, 
             that we will be performing a breadth first search on, up to a specifed depth. 
             Each web address is viewed as a node (of the graph), and each url on the current 
             web address will be viewd as an adjacent node to the current node 
             (current web address). Thus, we shall now iterate over all of the adjacent nodes,
-             adding them to our url queue.'''
+            adding them to our url queue.'''
 
-        	for link in adjacentLinks:#Iterate over all links found on the current page.
-         	   '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
-            	if (link.get('href') != None):
-                	newUrl = urljoin(currentUrl, link.get('href'))#Join base url (current url) with url on current page.
-                	if (newUrl not in visitedUrls):
-                    	urlQueue.append(newUrl)#Append the new url to the queue.
-                    	globalUrlQueue.append(newUrl)#Append the new url to the global queue.
-                    	visitedUrls.add(newUrl)#Add the new url to the set of visited urls.
+            for link in adjacentLinks:#Iterate over all links found on the current page.
+                '''Test to determine whether or not the current link is a real link, i.e., test if it contains the 'href' attribute.'''
+                
+                if (link.get('href') != None):
+                    newUrl = urljoin(currentUrl, link.get('href'))#Join base url (current url) with url on current page.
+                    
+                    #############################
+                    #### NEWLY ADDED BEGIN ######
+                    #############################
+                    '''====================================================================================
+                    ==Iterate over all of the visited urls, and determine whether or not the new url is 
+                    ==either a sub-string or a super-string of any of the urls in the set of urls that have
+                    ==been visited already.
+                    ======================================================================================='''
+                    alike_flag = False
+                    for tempUrlStr in visitedUrls:
+                        if (tempUrlStr in newUrl or newUrl in tempUrlStr):
+                        alike_flag = True
+
+                    if (alike_flag):
+                        continue
+                    #########################
+                    #### NEWLY ADDED END ####  
+                    #########################
+
+                    if (newUrl not in visitedUrls):
+                        urlQueue.append(newUrl)#Append the new url to the queue.
+                        globalUrlQueue.append(newUrl)#Append the new url to the global queue.
+                        visitedUrls.add(newUrl)#Add the new url to the set of visited urls.
 
 
-
+'''
 def processUrlQueue():
 	while(1):
 		#TODO: Derive a means of breaking from this loop. What conditions must be met.
@@ -122,7 +143,7 @@ url_processor_thread.start()
 
 crawler_thread.join()#Wait for thread to finish execution before executing the rest of instructions in the program.
 url_processor_thread.join()#Wait for the thread to finish execution before executing the rest of instructions in the program.
-
+'''
 
 
 
