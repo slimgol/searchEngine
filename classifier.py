@@ -21,7 +21,7 @@ Approach:
 
 import seedPages#Seed pages that will be used to get the training and test data for the classifier.
 import nltk
-from normalizer import normalize_text#Used to normalize the extracted text.
+from normalizer import normalize_text, normalize_list_of_strings#Used to normalize the extracted text.
 from sklearn.naive_bayes import MultinomialNB
 import random#Used for generating pseudorandom numbers.
 from sklearn.feature_extraction.text import CountVectorizer
@@ -63,7 +63,7 @@ def extractText(urlString):
 	in training a text classigier. Thus, paragraphs, headers, etc...'''
 
 	paragraphList = soup.find_all('p')
-	paragraphString = ""#Create an empty string.
+	paragraphString = " "#Create an empty string.
 	for paragraph in paragraphList:#Iterate over all paragraphs.
 		paragraphString = paragraphString + " " + paragraph.get_text()
 
@@ -221,8 +221,8 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 	Check to determine if the filename exists already. If so, then load the model from 
 	storage, and return it to the calling function.
 	'''
-	if (os.path.isfile(fullFilePathName)):
-		return loadModel(fullFilePathName)
+	#if (os.path.isfile(fullFilePathName)):
+	#	#return loadModel(fullFilePathName)
 
 
 	#If above condition is not met, then perform the following...
@@ -247,7 +247,14 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 	#Use the trained vectorizer to transform the normalized test corpus, to create the bag of words for the normalized test corpus.
 	bow_test_features = bow_vectorizer.transform(test_x)
 
-
+	################
+	'''
+	Check to determine if the filename exists already. If so, then load the model from 
+	storage, and return it to the calling function.
+	'''
+	if (os.path.isfile(fullFilePathName)):
+		return loadModel(fullFilePathName), bow_vectorizer
+	################
 	#Build model using the bow training features, and the corresponding labels.
 	classifier.fit(bow_train_features, train_y)
 
@@ -258,7 +265,7 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 	saveModel(classifier, fullFilePathName)
 
 	#Return the trained classifier.
-	return classifier
+	return classifier, bow_vectorizer
 
 
 
@@ -273,7 +280,9 @@ FILE = 'MNBClassifier.pkl'
 train_text,train_target,test_text,test_target = trainTestSplit(seedPages.ENERGY_SEED_URLS)
 
 #Get trained classifier.
-clf = trainModel(FILE, train_text, train_target, test_text, test_target)
+clf, bow_vec = trainModel(FILE, train_text, train_target, test_text, test_target)
+print(train_text[0])
+print(clf.predict(bow_vec.transform(train_text)))
 
 
 
@@ -292,13 +301,12 @@ def classifyUrl(url):
 	#Normalize text.
 	normalizedString = normalize_text(text)
 	#Create bag of words features from the normalized text. We will use our pre-trained bow vectorizer.
-	bow_features = bow_vectorizer.transform([normalizedString])#Note that "transform" method accepts a list of strings.
+	bow_features = bow_vec.transform([normalizedString])#Note that "transform" method accepts a list of strings.
 	#Make prediction.
-	prediction = classifier.predict(bow_features)
+	prediction = clf.predict(bow_features)
 	#Prediction will be an array of integers (of length 1 in this case).
 	#The first element in the array will contain the integer class.
 	return prediction[0] #TODO: Explain what data type is returned, and also whatelese needs to be done.
-
 
 
 

@@ -12,9 +12,9 @@ Approach:
 
 
 TODO:
-	Create a max heap, and then use the heap sort algorithm to sort it.
+Use a different sorting algorithm here.
 '''
-
+#Sort a list of pairs (url, score).
 def sortArrayDescending(newArray):
 	SIZE = len(newArray)
 
@@ -41,10 +41,11 @@ Approach:
 
 '''
 
-from classifier import extract_text#Used for extracting text from a given url.
+from classifier import extractText#Used for extracting text from a given url.
 from normalizer import normalize_text#Used for text normalization.
 
-def urlScore(url, termsSet, topicWeight = 1.75):
+#TODO: Fix the weighting scheme.
+def urlScore(url, termsSet, topicWeight=1):
 	#Extract text from the url.
 	extractedString = extract_text(url)
 
@@ -72,7 +73,7 @@ def urlScore(url, termsSet, topicWeight = 1.75):
 			else:
 				termsFrequency += 1
 
-	#Note: The following should not occur.
+	#Note: The following condition should not occur.
 	if (numTokens == 0):
 		return None 
 

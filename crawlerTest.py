@@ -71,6 +71,7 @@ def crawl_(seed, depth=4):
                 newUrl = "http://www."+subDomain
                 #####
                 '''
+                '''
                 print(link.get('href'))
                 alike_flag = False
                 for tempUrlStr in processedUrls:
@@ -79,8 +80,8 @@ def crawl_(seed, depth=4):
 
                 if (alike_flag):
                     continue
+                '''
 
-                #Below condition is not needed.
                 #TODO: Do some more processing here.
                 if (newUrl not in processedUrls):
                     urlQueue.append(newUrl)#Append the new url to the queue.

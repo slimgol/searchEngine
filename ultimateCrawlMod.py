@@ -129,24 +129,27 @@ def crawl_(seedList, depth=4):
                     '''
 
 
-'''
+
 def processUrlQueue():
-	while(1):
-		#TODO: Derive a means of breaking from this loop. What conditions must be met.
-
-		if (not globalUrlQueue):#Queue is empty.
-			time.sleep(1)#sleep for one second.
-			continue#Skip the rest of instructions in current iteration.
-		#Dequeue element from queue and process it.
-		currentUrl = globalUrlQueue.pop(0)
-		if (currentUrl in globalProcessedUrlSet):
-			continue#url is already in database.
-
-		urlClass = classifyUrl(currentUrl)#Classify the url.
-		
+    while(1):
+        #TODO: Derive a means of breaking from this loop. What conditions must be met.
+        if(not globalUrlQueue):#Queue is empty.
+			#time.sleep(1)#sleep for one second.
+            continue#Skip the rest of instructions in current iteration.
+        #Dequeue element from queue and process it.
+        currentUrl = globalUrlQueue.pop(0)
+        if (currentUrl in globalProcessedUrlSet):
+            continue#url is already in database.
+        urlClass = classifyUrl(currentUrl)#Classify the url.
+        print(urlClass)
 		#TODO: Store important information in database.
 
 
+crawl_(["https://www.youtube.com"])
+processUrlQueue()
+
+
+'''
 #Create thread to crawl the web.
 crawler_thread = threading.Thread(target=crawl_, args=(seedList, depth, ))
 #Create thread to process the url queue.

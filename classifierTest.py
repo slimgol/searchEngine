@@ -9,7 +9,7 @@ Approach:
 
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.cross_validation import train_test_split
-from test import normalize_list_of_strings
+from normalizer import normalize_list_of_strings
 
 def get_data():
 	return fetch_20newsgroups(subset='all', shuffle=True, remove=('headers','footers','quotes'))
