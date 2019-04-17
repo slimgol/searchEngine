@@ -12,7 +12,11 @@ Approach:
 
 
 TODO:
-Use a different sorting algorithm here.
+Use a different sorting algorithm here; perhaps have different sorting algorithms.
+The aim is to reduce computational cost. Thus, have two different sorting algorithms- 
+one that performs well on small datasets, and another that performs well on large datasets.
+Note that we must define what "small" and "large" are.
+Thus, we shall sort with the algorithm that will reduce the overall computational cost.
 '''
 #Sort a list of pairs (url, score).
 def sortArrayDescending(newArray):
@@ -20,12 +24,13 @@ def sortArrayDescending(newArray):
 
 	for i in range(newArray):
 		for j in range(newArray-i-1):
-			if (newArray[j]<newArray[j+1]):
+			if (newArray[j][1]<newArray[j+1][1]):
 				#Swap elements
 				temp = newArray[j]
 				newArray[j] = newArray[j+1]
 				newArray[j+1] = temp
 
+	#Create a new array, containing only the urls in their ranked order.
 	url_array = []
 
 	for pair_ in newArray:

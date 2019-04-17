@@ -8,10 +8,10 @@ def sortArrayDescending(newArray):
 				temp = newArray[j]
 				newArray[j] = newArray[j+1]
 				newArray[j+1] = temp
+	return newArray
+	#url_array = []
 
-	url_array = []
+	#for pair_ in newArray:
+	#	url_array.append(pair_[0])
 
-	for pair_ in newArray:
-		url_array.append(pair_[0])
-
-	return url_array
+	#return url_array

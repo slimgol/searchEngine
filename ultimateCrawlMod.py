@@ -167,6 +167,7 @@ def processUrlQueue():
         
         urlClass = classifyUrl(currentUrl)#Classify the url.
         print(urlClass)
+        print(currentUrl)
 		#TODO: Store important information in database.
 
 
