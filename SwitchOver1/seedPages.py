@@ -1,10 +1,3 @@
-'''
-Note: These are not the seed pages (the name is deceiving). These urls are used for training the
-classifier.
-'''
-
-
-
 topic_codes = {0: 'geothermal', 1: 'wind', 2: 'hydropower', 3: 'biomass', 4: 'solar'}
 
 #TODO: Makesure that there are no duplicate urls.
