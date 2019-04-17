@@ -13,6 +13,24 @@ Derive a way of measuring the quality of links.
 Perhaps we can form a hybrid search- a mix between BFS and DFS... Perhaps when we come across a very high
 quality link (where the quality exceeds some predefined threshold), then we start another thread of execution to run 
 in parallel to perform a DFS on that quality node.
+
+TODO:
+---------------------------------------------------------------------------------------------------------------------
+What about mutual exclusion (mutexes) locks on the global url queue, since it is 
+being accessed by two threads. Generally, there wont be a problem, as data is being
+added to the back of the queue and removed from the front, and data is being 
+enqueued much faster than it is being dequeued (since it takes longer to process a 
+url, rather than just visit it). However, this is a flaw, and it needs to be corrected.
+
+In addition, due to the memory constraints of the system that the crawl is being performed on,
+perhaps the thread that is taking care of the crawling should be timed out for a bit, if the 
+size of the queue exceeds a certain threshold. This is so that the thread that is processing
+the queue (classifying and storing in the database) can have some time to "catch-up" (by removing
+some of the elements from the memory, and placing them in storage (the database)). 
+Or perhaps, we can introduce a third thread that is usually asleep, and periodically "wakes-up" to
+check the memory consumption, and if necessary, signals a temporary timeout for the "crawler" thread.
+Note, this is all necessary because crawling can take a couple of days or even weeks, and thus, runs 
+the risk of causing the program to crash, due to too much memory consumption.
 '''
 
 
@@ -129,31 +147,38 @@ def crawl_(seedList, depth=4):
                     '''
 
 
+'''
+TODO:
+Set a termination condition. Perhaps the termination condition could once all 
+of the crawling has been done, as well as all the urls in the url queue have been 
+processed.
+'''
 
 def processUrlQueue():
     while(1):
         #TODO: Derive a means of breaking from this loop. What conditions must be met.
         if(not globalUrlQueue):#Queue is empty.
-			#time.sleep(1)#sleep for one second.
+            time.sleep(1)#sleep for one second.
             continue#Skip the rest of instructions in current iteration.
         #Dequeue element from queue and process it.
         currentUrl = globalUrlQueue.pop(0)
         if (currentUrl in globalProcessedUrlSet):
             continue#url is already in database.
+        
         urlClass = classifyUrl(currentUrl)#Classify the url.
         print(urlClass)
 		#TODO: Store important information in database.
 
 
-crawl_(["https://www.youtube.com"])
-processUrlQueue()
+#crawl_(["https://www.youtube.com"])
+#processUrlQueue()
 
 
-'''
+
 #Create thread to crawl the web.
-crawler_thread = threading.Thread(target=crawl_, args=(seedList, depth, ))
+crawler_thread = threading.Thread(target=crawl_, args=(["https://en.wikipedia.org/wiki/Wind_power"], 4,))
 #Create thread to process the url queue.
-url_processor_thread = threading.Thread(target=processedUrlQueue)
+url_processor_thread = threading.Thread(target=processUrlQueue)
 
 #Start the crawler thread.
 crawler_thread.start()
@@ -163,7 +188,7 @@ url_processor_thread.start()
 
 crawler_thread.join()#Wait for thread to finish execution before executing the rest of instructions in the program.
 url_processor_thread.join()#Wait for the thread to finish execution before executing the rest of instructions in the program.
-'''
+
 
 
 
