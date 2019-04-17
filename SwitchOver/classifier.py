@@ -296,9 +296,8 @@ print(clf.predict(bow_vec.transform(train_text)))
 This function accepts a raw url, reads the content of the web-page from the url, normalizes the
 text, and uses the trained classifier to make a prediction.
 This function then returns the prediction to the calling function.
-The prediction is an integer, which corresponds to one of the classes of renewable energy.
+Teh prediction is an integer, which corresponds to one of the classes of renewable energy.
 '''
-
 
 def classifyUrl(url):
 	text = extractText(url)
@@ -316,26 +315,10 @@ def classifyUrl(url):
 
 
 
-
-'''
-This function accepts a string and then classifies that string.
-This is to be used for when we need to classify the input text (raw query) from the user.
-'''
-def classifyText(inputText):
-	if (text == None):
-		return None
-
-	#Normalize input text.
-	normalizedText = normalize_text(inputText)
-	bow_feat = bow_vec.transform([inputText])
-	return clf.predict(bow_feat)#Return predicted topic.
-
-
-'''
 print("Pred:")
 print(classifyUrl("https://www.youtube.com"))
 print(classifyUrl("https://en.wikipedia.org/wiki/Wind_power"))
-'''
+
 
 
 

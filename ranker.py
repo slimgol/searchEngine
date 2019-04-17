@@ -22,8 +22,12 @@ Thus, we shall sort with the algorithm that will reduce the overall computationa
 def sortArrayDescending(newArray):
 	SIZE = len(newArray)
 
-	for i in range(newArray):
-		for j in range(newArray-i-1):
+	'''
+	Sort all of the elemnts by their score.
+	Note that the array stores pairs of the form (url, score).
+	'''
+	for i in range(SIZE):
+		for j in range(SIZE-i-1):
 			if (newArray[j][1]<newArray[j+1][1]):
 				#Swap elements
 				temp = newArray[j]
@@ -36,6 +40,7 @@ def sortArrayDescending(newArray):
 	for pair_ in newArray:
 		url_array.append(pair_[0])
 
+	#Return array of urls.
 	return url_array
 
 
@@ -50,7 +55,7 @@ from classifier import extractText#Used for extracting text from a given url.
 from normalizer import normalize_text#Used for text normalization.
 
 #TODO: Fix the weighting scheme.
-def urlScore(url, termsSet, topicWeight=1):
+def urlScore(url, termsSet):
 	#Extract text from the url.
 	extractedString = extract_text(url)
 
@@ -73,10 +78,15 @@ def urlScore(url, termsSet, topicWeight=1):
 	for token in normalizedTokensList:
 		numTokens += 1
 		if (token in termsSet):
+			'''
+			The block code below is to be used if we use a weighting scheme. 
+			Note that, for now, we won't be using a weighting scheme.
 			if (token == topic):
 				termsFrequency += topicWeight
 			else:
 				termsFrequency += 1
+			'''
+			termsFrequency += 1
 
 	#Note: The following condition should not occur.
 	if (numTokens == 0):
