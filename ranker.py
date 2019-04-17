@@ -59,7 +59,7 @@ from seedPages import topic_codes#A dictionary of topic codes (integer to topic 
 #TODO: Fix the weighting scheme.
 def urlScore(url, termsSet):
 	#Extract text from the url.
-	extractedString = extract_text(url)
+	extractedString = extractText(url)
 
 	if (extractedString == None):
 		return None#Failed to extract text from the url.
@@ -100,7 +100,7 @@ def urlScore(url, termsSet):
 
 
 def rankUrls(urlList, searchTerm):
-	topicNumber = classifyText(topic)
+	topicNumber = classifyText(searchTerm)
 	if (topicNumber not in topic_codes):
 		return None #Error occured.
 
@@ -143,6 +143,7 @@ def rankUrls(urlList, searchTerm):
 	return sortArrayDescending(scored_urls)
 
 	
+print(rankUrls(["https://www.youtube.com","http://windeis.anl.gov/guide/basics/","https://en.wikipedia.org/wiki/Solar_energy","https://www.energysage.com/solar/"],"wind wind wind"))
 
 
 

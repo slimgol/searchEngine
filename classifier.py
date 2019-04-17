@@ -260,8 +260,8 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 	#train_y = np.array(train_y)#Convert to a numpy array.
 	classifier.fit(bow_train_features, train_y)
 
-	print(classifier.predict(bow_test_features))
-	print(test_y)
+	#print(classifier.predict(bow_test_features))
+	#print(test_y)
 
 	#Save the model to disk for future use.
 	saveModel(classifier, fullFilePathName)
@@ -286,8 +286,7 @@ test_target = np.array(test_target)
 
 #Get trained classifier.
 clf, bow_vec = trainModel(FILE, train_text, train_target, test_text, test_target)
-print(train_text[0])
-print(clf.predict(bow_vec.transform(train_text)))
+
 
 
 
@@ -322,13 +321,14 @@ This function accepts a string and then classifies that string.
 This is to be used for when we need to classify the input text (raw query) from the user.
 '''
 def classifyText(inputText):
-	if (text == None):
+	if (inputText == None):
 		return None
 
 	#Normalize input text.
 	normalizedText = normalize_text(inputText)
 	bow_feat = bow_vec.transform([inputText])
-	return clf.predict(bow_feat)#Return predicted topic.
+	#bow_feat = np.array(bow_feat)
+	return clf.predict(bow_feat)[0]#Return predicted topic.
 
 
 '''
