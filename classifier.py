@@ -317,6 +317,7 @@ def classifyUrl(url):
 
 print("Pred:")
 print(classifyUrl("https://www.youtube.com"))
+print(classifyUrl("https://en.wikipedia.org/wiki/Wind_power"))
 
 
 
