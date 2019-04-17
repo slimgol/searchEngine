@@ -1,5 +1,5 @@
 from sklearn.feature_extraction.text import CountVectorizer
-from test import normalize_list_of_strings
+from normalizer import normalize_list_of_strings
 
 #corpus will be a list of strings.
 def bow_extractor(corpus, ngram_range=(1,1)):

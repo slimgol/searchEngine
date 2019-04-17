@@ -29,6 +29,7 @@ from bs4 import BeautifulSoup
 from urllib import request
 import os
 from sklearn.externals import joblib#Used to achieve model persistence.
+import numpy as np
 
 
 '''
@@ -256,6 +257,7 @@ def trainModel(fileName, train_x, train_y, test_x, test_y):
 		return loadModel(fullFilePathName), bow_vectorizer
 	################
 	#Build model using the bow training features, and the corresponding labels.
+	#train_y = np.array(train_y)#Convert to a numpy array.
 	classifier.fit(bow_train_features, train_y)
 
 	print(classifier.predict(bow_test_features))
@@ -278,6 +280,9 @@ FILE = 'MNBClassifier.pkl'
 #Get training and testing datasets.
 #TODO: If the classifier is trained already then we do not have to do this.
 train_text,train_target,test_text,test_target = trainTestSplit(seedPages.ENERGY_SEED_URLS)
+
+train_target = np.array(train_target)
+test_target = np.array(test_target)
 
 #Get trained classifier.
 clf, bow_vec = trainModel(FILE, train_text, train_target, test_text, test_target)
@@ -310,7 +315,8 @@ def classifyUrl(url):
 
 
 
-
+print("Pred:")
+print(classifyUrl("https://www.youtube.com"))
 
 
 
