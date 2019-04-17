@@ -169,6 +169,14 @@ def processUrlQueue():
         print(urlClass)
         print(currentUrl)
 		#TODO: Store important information in database.
+        '''
+        The database starts the topics from 0; in here, we start the topics from one.
+        For now, when we store a result in the database add 1 to the topic, and when we 
+        query results from the database, subtract 1 from each topic.
+        Note, this is just temporary, and we need to change the dictionary to start the topics 
+        from 0 as opposed to 1.
+        '''
+        #TODO: Add record to database.
 
 
 #crawl_(["https://www.youtube.com"])

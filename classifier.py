@@ -17,6 +17,11 @@ Approach:
 	Normalize text.
 	Split pages into training and testing pages.
 	Train classifier.
+
+
+IMPORTANT NOTE:
+There seems to be a problem with the classifier when it is saved to the disk. Perhaps the file 
+is being corrupted, or the data is being stored in an improper format.
 '''
 
 import seedPages#Seed pages that will be used to get the training and test data for the classifier.
