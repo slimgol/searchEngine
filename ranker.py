@@ -51,8 +51,10 @@ Approach:
 
 '''
 
-from classifier import extractText#Used for extracting text from a given url.
+from classifier import extractText, classifyText#Used for extracting text from a given url; used for
+#clasifying an input string.
 from normalizer import normalize_text#Used for text normalization.
+from seedPages import topic_codes#A dictionary of topic codes (integer to topic string mapping).
 
 #TODO: Fix the weighting scheme.
 def urlScore(url, termsSet):
@@ -97,17 +99,23 @@ def urlScore(url, termsSet):
 
 
 
-def rankUrls(urlList, searchTerm, topic):
+def rankUrls(urlList, searchTerm):
+	topicNumber = classifyText(topic)
+	if (topicNumber not in topic_codes):
+		return None #Error occured.
+
+	#Use the topic codes dictionary to extract the corresponding topic name.
+	topicName = topic_codes[topicNumber]
+
 	#Normalize the raw input search term.
 	normalizedSearchTerm = normalize_text(searchTerm)
 
 	#Create array of tokens from the normalized search term.
 	normalizedSearchTokens = normalizedSearchTerm.split()
 
-	#TODO:
-	#Ensure that all of the search tokens are converted to lower case.
-	if (topic not in normalizedSearchTokens):
-		normalizedSearchTokens.append(topic)#Add the topic to the list of search terms.
+	#Determine if the topic is in the normalized search tokens.
+	if (topicName not in normalizedSearchTokens):
+		normalizedSearchTokens.append(topicName)#Add the topic to the list of search terms.
 
 	#Create empty array to store the urls and their associated scores.
 	scored_urls = []
@@ -132,7 +140,7 @@ def rankUrls(urlList, searchTerm, topic):
 	the sorted list of urls, without the score. Hence, the function will just return the 
 	sorted list of urls.
 	'''
-	sortedUrls = sortArrayDescending(scored_urls)
+	return sortArrayDescending(scored_urls)
 
 	
 

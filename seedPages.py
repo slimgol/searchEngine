@@ -1,4 +1,4 @@
-topic_codes = {0: 'Geothermal Energy', 1: 'Wind Energy', 2: 'Hydropower', 3: 'Biomass Energy', 4: 'Solar Energy'}
+topic_codes = {0: 'geothermal', 1: 'wind', 2: 'hydropower', 3: 'biomass', 4: 'solar'}
 
 
 
