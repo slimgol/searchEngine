@@ -156,28 +156,33 @@ processed.
 
 def processUrlQueue():
     while(1):
-        #TODO: Derive a means of breaking from this loop. What conditions must be met.
-        if(not globalUrlQueue):#Queue is empty.
-            time.sleep(1)#sleep for one second.
-            continue#Skip the rest of instructions in current iteration.
-        #Dequeue element from queue and process it.
-        currentUrl = globalUrlQueue.pop(0)
-        if (currentUrl in globalProcessedUrlSet):
-            continue#url is already in database.
+        try:
+            #TODO: Derive a means of breaking from this loop. What conditions must be met.
+            if(not globalUrlQueue):#Queue is empty.
+                time.sleep(1)#sleep for one second.
+                continue#Skip the rest of instructions in current iteration.
+            #Dequeue element from queue and process it.
+            currentUrl = globalUrlQueue.pop(0)
+            if (currentUrl in globalProcessedUrlSet):
+                continue#url is already in database.
         
-        urlClass = classifyUrl(currentUrl)#Classify the url.
-        print(urlClass)
-        print(currentUrl)
-		#TODO: Store important information in database.
-        '''
-        The database starts the topics from 0; in here, we start the topics from one.
-        For now, when we store a result in the database add 1 to the topic, and when we 
-        query results from the database, subtract 1 from each topic.
-        Note, this is just temporary, and we need to change the dictionary to start the topics 
-        from 0 as opposed to 1.
-        '''
-        #TODO: Add record to database.
-
+            urlClass = classifyUrl(currentUrl)#Classify the url.
+            print(urlClass)
+            print(currentUrl)
+            #TODO: Store important information in database.
+            '''
+            The database starts the topics from 0; in here, we start the topics from one.
+            For now, when we store a result in the database add 1 to the topic, and when we 
+            query results from the database, subtract 1 from each topic.
+            Note, this is just temporary, and we need to change the dictionary to start the topics 
+            from 0 as opposed to 1.
+            '''
+            #TODO: Add record to database.
+            #addToDB(url, urlClass-1)
+            #pull ---> must subtract 1 from the topic
+        except:
+            print("Could not open page:")
+            print(currentUrl)
 
 #crawl_(["https://www.youtube.com"])
 #processUrlQueue()
